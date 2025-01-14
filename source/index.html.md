@@ -25,11 +25,9 @@ meta:
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+Welcome to the HashDit API! You can use our API to access HashDit service, which provides various security capabilities including address security, token security, transaction securitiy, ...
 
-We have language bindings in Shell, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
-
-This example API documentation page was created with [Slate](https://github.com/slatedocs/slate). Feel free to edit it and use it as a base for your own API's documentation.
+We have language bindings in Shell, Go, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
 
 # Authentication
 
@@ -86,9 +84,15 @@ fetch(url, {
 
 > Make sure to replace `****` with your API key.
 
-HashDit uses API keys to allow access to the API. You can apply a new HashDit API key by contacting support@hashdit.io.
+HashDit uses API keys to allow access to the API. You can apply a new HashDit API key by contacting support@hashdit.io. It will be much appreciated if you could provide the following information in your email:
 
-HashDit expects for the API key to be included in all API requests to the server in a header that looks like the following:
+* Some background of your project, business scenario, etc.. for example: DeFi wallet Dex
+* When will your business be fully in production?
+* What’s your rollout plan in production?
+  * like 10% on Dec 10th, 50% on Dec 15th, ...
+* What’s the estimated QPS you will put on our API when fully roll out?
+
+Then HashDit expects for the API key to be included in all API requests to the server in a header that looks like the following:
 
 `X-API-Key: ****`
 
@@ -235,9 +239,6 @@ maxFeePerGas  | Optional  |         | EIP1559 max fee per gas
 maxPriorityFeePerGas  | Optional  |         | EIP1559 tip fee per gas
 nonce     | Optional  |         | the transaction nonce
 dappUrl   | Optional  |         | the URL of the dapp initiated the transaction
-
-<aside class="success">
-</aside>
 
 
 ## Token Security
@@ -457,6 +458,3 @@ Parameter | Required? | Default | Description
 --------- | --------- | ------- | -----------
 chainId   | Yes       | 56      | The chain you want to check againt
 address   | Yes       |         | the token address to be analyzed
-
-<aside class="success">
-</aside>
