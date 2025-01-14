@@ -345,11 +345,9 @@
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='introduction'>Introduction</h1>
-<p>Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.</p>
+<p>Welcome to the HashDit API! You can use our API to access HashDit service, which provides various security capabilities including address security, token security, transaction securitiy, ...</p>
 
-<p>We have language bindings in Shell, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
-
-<p>This example API documentation page was created with <a href="https://github.com/slatedocs/slate">Slate</a>. Feel free to edit it and use it as a base for your own API&#39;s documentation.</p>
+<p>We have language bindings in Shell, Go, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
 <h1 id='authentication'>Authentication</h1>
 <blockquote>
 <p>To authorize, use this code:</p>
@@ -396,9 +394,20 @@ curl <span class="nt">--request</span> POST <span class="se">\</span>
 <p>Make sure to replace <code>****</code> with your API key.</p>
 </blockquote>
 
-<p>HashDit uses API keys to allow access to the API. You can apply a new HashDit API key by contacting support@hashdit.io.</p>
+<p>HashDit uses API keys to allow access to the API. You can apply a new HashDit API key by contacting support@hashdit.io. It will be much appreciated if you could provide the following information in your email:</p>
 
-<p>HashDit expects for the API key to be included in all API requests to the server in a header that looks like the following:</p>
+<ul>
+<li>Some background of your project, business scenario, etc.. for example: DeFi wallet Dex</li>
+<li>When will your business be fully in production?</li>
+<li>What’s your rollout plan in production?
+
+<ul>
+<li>like 10% on Dec 10th, 50% on Dec 15th, ...</li>
+</ul></li>
+<li>What’s the estimated QPS you will put on our API when fully roll out?</li>
+</ul>
+
+<p>Then HashDit expects for the API key to be included in all API requests to the server in a header that looks like the following:</p>
 
 <p><code>X-API-Key: ****</code></p>
 
@@ -586,9 +595,6 @@ You must replace <code>****</code> with your real API key.
 <td>the URL of the dapp initiated the transaction</td>
 </tr>
 </tbody></table>
-
-<aside class="success">
-</aside>
 <h2 id='token-security'>Token Security</h2><div class="highlight"><pre class="highlight go tab-go"><code><span class="k">package</span> <span class="n">main</span>
 
 <span class="k">import</span> <span class="p">(</span>
@@ -805,9 +811,6 @@ You must replace <code>****</code> with your real API key.
 <td>the token address to be analyzed</td>
 </tr>
 </tbody></table>
-
-<aside class="success">
-</aside>
 <h1 id='errors'>Errors</h1>
 <aside class="notice">
 This error section is stored in a separate file in <code>includes/_errors.md</code>. Slate allows you to optionally separate out your docs into many files...just save them to the <code>includes</code> folder and add them to the top of your <code>index.md</code>'s frontmatter. Files are included in the order listed.
