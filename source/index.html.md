@@ -214,7 +214,7 @@ fetch(url, {
 }
 ```
 
-This endpoint retrieves all kittens.
+This endpoint returns the risk level and risk details about the requested transaction.
 
 ### HTTP Request
 
@@ -235,6 +235,228 @@ maxFeePerGas  | Optional  |         | EIP1559 max fee per gas
 maxPriorityFeePerGas  | Optional  |         | EIP1559 tip fee per gas
 nonce     | Optional  |         | the transaction nonce
 dappUrl   | Optional  |         | the URL of the dapp initiated the transaction
+
+<aside class="success">
+</aside>
+
+
+## Token Security
+
+```go
+package main
+
+import (
+    "bytes"
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    url := "https://service.hashdit.io/v2/hashdit/token-security"
+    method := "POST"
+
+    payload := []byte(`{
+        "chainId": 56,
+        "address": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+    }`)
+
+    client := &http.Client{}
+    req, err := http.NewRequest(method, url, bytes.NewBuffer(payload))
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    req.Header.Add("Content-Type", "application/json")
+    req.Header.Add("X-API-Key", "****")
+
+    res, err := client.Do(req)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    defer res.Body.Close()
+
+    fmt.Println("Response Status:", res.Status)
+}
+```
+
+```python
+import requests
+
+url = "https://service.hashdit.io/v2/hashdit/token-security"
+payload = {
+    "chainId": 56,
+    "address": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+}
+headers = {
+    "Content-Type": "application/json",
+    "X-API-Key": "****"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+
+print("Response Status:", response.status_code)
+print("Response Body:", response.text)
+```
+
+```shell
+curl --request POST \
+  --url https://service.hashdit.io/v2/hashdit/transaction-security \
+  --header 'Content-Type: application/json' \
+  --header 'X-API-Key: ****' \
+  --data '{
+  "chainId": 56,
+  "address": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+}'
+```
+
+```javascript
+const url = "https://service.hashdit.io/v2/hashdit/transaction-security";
+const payload = {
+    chainId: 56,
+    address: "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+};
+
+const headers = {
+    "Content-Type": "application/json",
+    "X-API-Key": "****"
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(payload)
+})
+.then(response => response.json())
+.then(data => {
+    console.log("Response Data:", data);
+})
+.catch(error => {
+    console.error("Error:", error);
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+	"code": "0",
+	"status": "ok",
+	"data": {
+		"proxy": {
+			"is_proxy": "0",
+			"proxy_admin_type": "",
+			"proxy_admin_address": "",
+			"proxy_implementation_address": "",
+			"proxy_implementation_verified": ""
+		},
+		"status": 200,
+		"buy_gas": "-1",
+		"buy_tax": "-1",
+		"holders": [
+			{
+				"token_balance": "1292648065000000000000",
+				"account_address": "0xdBD3fa3469A67876f530b94f2f6C6800202434ca"
+			},
+			{
+				"token_balance": "400000000000000000000",
+				"account_address": "0xf823034616585049c0f9f9b6761c31A383F2DbBf"
+			},
+			{
+				"token_balance": "314541160000000000000",
+				"account_address": "0x747DBB91f4d19DDD311D24B2Ff8EB207e7ce10E2"
+			},
+			{
+				"token_balance": "139152693933746153812",
+				"account_address": "0xf25B3fa015f33c9d8D760069091150709516004A"
+			},
+			{
+				"token_balance": "100000000000000000000",
+				"account_address": "0x9fAC90FC6a339E093fEB32D6F0aBFcefb28bCc75"
+			},
+			{
+				"token_balance": "60462512000000000000",
+				"account_address": "0xa47dCC127BD2487B01477D8e381dCEd5de5e5033"
+			},
+			{
+				"token_balance": "50000000000000000000",
+				"account_address": "0xBe1e9EA516Ac20DD300358224Ae0a75e42150E1C"
+			},
+			{
+				"token_balance": "45000000000000000000",
+				"account_address": "0x1d2B16cfbd9128F1EC0BBe3E3b08299A9ecA3EE7"
+			},
+			{
+				"token_balance": "27090220000000000000",
+				"account_address": "0x6a3FfA5C2F13898848295C3D2920614735069CE3"
+			},
+			{
+				"token_balance": "20600000000000000000",
+				"account_address": "0xC1F80A92AfBBb299844fDc41B3194F0437E050e2"
+			}
+		],
+		"dex_info": [],
+		"sell_gas": "-1",
+		"sell_tax": "-1",
+		"verified": "1",
+		"is_in_dex": "0",
+		"cannot_buy": "0",
+		"fake_token": {
+			"is_fake": "0",
+			"mimic_token_name": "",
+			"mimic_token_symbol": "",
+			"mimic_token_address": ""
+		},
+		"owner_type": "contract",
+		"token_name": "USDe",
+		"cannot_sell": "0",
+		"dev_address": "0xaa439fb33e55306c7c79841f20121b4c4139f3dc",
+		"is_mintable": "1",
+		"address_type": "ERC20",
+		"hidden_owner": "0",
+		"token_symbol": "USDe",
+		"total_supply": "2586985396000000000000",
+		"transfer_gas": "-1",
+		"transfer_tax": "-1",
+		"holders_count": "110",
+		"is_anti_whale": "0",
+		"owner_address": "0xc9647361742Eb964965B461C44Bdf5c4Bc3c406d",
+		"self_destruct": "0",
+		"diting_version": "v1.2.7",
+		"token_decimals": "18",
+		"cannot_transfer": "0",
+		"token_price_usd": "0.9996",
+		"code_obfuscation": "0",
+		"dev_token_balance": "0",
+		"dev_token_percent": "0.0",
+		"transfer_cooldown": "0",
+		"transfer_pausable": "0",
+		"transfer_blacklist": "0",
+		"transfer_whitelist": "0",
+		"unlimited_mintable": "0",
+		"bad_function_encode": "0",
+		"owner_token_balance": "0",
+		"owner_token_percent": "0.0",
+		"owner_change_balance": "0",
+		"anti_whale_modifiable": "0",
+		"balance_external_call": "0",
+		"low_level_external_call": "0"
+	}
+}
+```
+
+This endpoint returns all of the risk info about the requested token.
+
+### HTTP Request
+
+`POST https://service.hashdit.io/v2/hashdit/token-security`
+
+### Post Parameters
+
+Parameter | Required? | Default | Description
+--------- | --------- | ------- | -----------
+chainId   | Yes       | 56      | The chain you want to check againt
+address   | Yes       |         | the token address to be analyzed
 
 <aside class="success">
 </aside>
