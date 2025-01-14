@@ -3,7 +3,7 @@ title: API Reference
 
 language_tabs: # must be one of https://github.com/rouge-ruby/rouge/wiki/List-of-supported-languages-and-lexers
   - shell
-  - ruby
+  - go
   - python
   - javascript
 
@@ -35,211 +35,206 @@ This example API documentation page was created with [Slate](https://github.com/
 
 > To authorize, use this code:
 
-```ruby
-require 'kittn'
+```go
+import "net/http"
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
+client := &http.Client{}
+req, err := http.NewRequest(method, url, bytes.NewBuffer(payload))
+if err != nil {
+    fmt.Println(err)
+    return
+}
+req.Header.Add("Content-Type", "application/json")
+req.Header.Add("X-API-Key", "****")
 ```
 
 ```python
-import kittn
+import requests
 
-api = kittn.authorize('meowmeowmeow')
+headers = {
+    "Content-Type": "application/json",
+    "X-API-Key": "****"
+}
+
+response = requests.post(url, json=payload, headers=headers)
 ```
 
 ```shell
 # With shell, you can just pass the correct header with each request
-curl "api_endpoint_here" \
-  -H "Authorization: meowmeowmeow"
+curl --request POST \
+  --url https://service.hashdit.io/v2/hashdit/transaction-security \
+  --header 'Content-Type: application/json' \
+  --header 'X-API-Key: ****' \
+  --data '{
+  "chainId": 56,
+  "to": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+}'
 ```
 
 ```javascript
-const kittn = require('kittn');
+const headers = {
+    "Content-Type": "application/json",
+    "X-API-Key": "****"
+};
 
-let api = kittn.authorize('meowmeowmeow');
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(payload)
+})
 ```
 
-> Make sure to replace `meowmeowmeow` with your API key.
+> Make sure to replace `****` with your API key.
 
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
+HashDit uses API keys to allow access to the API. You can apply a new HashDit API key by contacting support@hashdit.io.
 
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
+HashDit expects for the API key to be included in all API requests to the server in a header that looks like the following:
 
-`Authorization: meowmeowmeow`
+`X-API-Key: ****`
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+You must replace <code>****</code> with your real API key.
 </aside>
 
-# Kittens
+# Security APIs
 
-## Get All Kittens
+## Transaction Security
 
-```ruby
-require 'kittn'
+```go
+package main
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
+import (
+    "bytes"
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    url := "https://service.hashdit.io/v2/hashdit/transaction-security"
+    method := "POST"
+
+    payload := []byte(`{
+        "chainId": 56,
+        "to": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+    }`)
+
+    client := &http.Client{}
+    req, err := http.NewRequest(method, url, bytes.NewBuffer(payload))
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    req.Header.Add("Content-Type", "application/json")
+    req.Header.Add("X-API-Key", "****")
+
+    res, err := client.Do(req)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    defer res.Body.Close()
+
+    fmt.Println("Response Status:", res.Status)
+}
 ```
 
 ```python
-import kittn
+import requests
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
+url = "https://service.hashdit.io/v2/hashdit/transaction-security"
+payload = {
+    "chainId": 56,
+    "to": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+}
+headers = {
+    "Content-Type": "application/json",
+    "X-API-Key": "****"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+
+print("Response Status:", response.status_code)
+print("Response Body:", response.text)
 ```
 
 ```shell
-curl "http://example.com/api/kittens" \
-  -H "Authorization: meowmeowmeow"
+curl --request POST \
+  --url https://service.hashdit.io/v2/hashdit/transaction-security \
+  --header 'Content-Type: application/json' \
+  --header 'X-API-Key: ****' \
+  --data '{
+  "chainId": 56,
+  "to": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+}'
 ```
 
 ```javascript
-const kittn = require('kittn');
+const url = "https://service.hashdit.io/v2/hashdit/transaction-security";
+const payload = {
+    chainId: 56,
+    to: "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+};
 
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
+const headers = {
+    "Content-Type": "application/json",
+    "X-API-Key": "****"
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(payload)
+})
+.then(response => response.json())
+.then(data => {
+    console.log("Response Data:", data);
+})
+.catch(error => {
+    console.error("Error:", error);
+});
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
-]
+{
+	"code": "0",
+	"status": "ok",
+	"data": {
+		"has_result": true,
+		"polling_interval": 0,
+		"risk_level": 0,
+		"risk_detail": [
+			{
+				"name": "is_in_wlist",
+				"value": "The contract is relatively safe based on the threat intelligence."
+			}
+		]
+	}
+}
 ```
 
 This endpoint retrieves all kittens.
 
 ### HTTP Request
 
-`GET http://example.com/api/kittens`
+`POST https://service.hashdit.io/v2/hashdit/transaction-security`
 
-### Query Parameters
+### Post Parameters
 
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
+Parameter | Required? | Default | Description
+--------- | --------- | ------- | -----------
+chainId   | Yes       | 56      | The chain you want to check againt
+to        | Yes       |         | the target address of the transaction
+from      | Optional  |         | the sender address of the transaction
+data      | Optional  |         | the transaction data
+value     | Optional  |         | the transaction value
+gas       | Optional  |         | the transaction gasLimit
+gasPrice  | Optional  |         | the transaction gasPrice
+maxFeePerGas  | Optional  |         | EIP1559 max fee per gas
+maxPriorityFeePerGas  | Optional  |         | EIP1559 tip fee per gas
+nonce     | Optional  |         | the transaction nonce
+dappUrl   | Optional  |         | the URL of the dapp initiated the transaction
 
 <aside class="success">
-Remember — a happy kitten is an authenticated kitten!
 </aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2" \
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
-```
-
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
-
-### HTTP Request
-
-`GET http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
-
-## Delete a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2" \
-  -X DELETE \
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-  "id": 2,
-  "deleted" : ":("
-}
-```
-
-This endpoint deletes a specific kitten.
-
-### HTTP Request
-
-`DELETE http://example.com/kittens/<ID>`
-
-### URL Parameters
-
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to delete
-
