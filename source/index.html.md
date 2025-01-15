@@ -444,6 +444,13 @@ fetch(url, {
 		"low_level_external_call": "0"
 	}
 }
+
+if atm the result is not available
+{
+	"code": "0",
+	"status": "in progress",
+	"pollAfter": 10
+}
 ```
 
 This endpoint returns all of the risk info about the requested token.
