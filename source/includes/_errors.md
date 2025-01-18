@@ -1,6 +1,6 @@
 # Errors
 
-Error Code | Meaning
+HTTP Code | Meaning
 ---------- | -------
 400 | Bad Request -- Your request is invalid.
 403 | Unauthorized -- Your API key is wrong.

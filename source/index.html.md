@@ -84,7 +84,7 @@ fetch(url, {
 
 > Make sure to replace `****` with your API key.
 
-HashDit uses API keys to allow access to the API. You can apply a new HashDit API key by contacting support@hashdit.io. It will be much appreciated if you could provide the following information in your email:
+HashDit uses API keys to allow access to the API. You can apply a new HashDit API key by contacting **support@hashdit.io**. It will be much appreciated if you could provide the following information in your email:
 
 * Some background of your project, business scenario, etc.. for example: DeFi wallet Dex
 * When will your business be fully in production?
@@ -240,6 +240,23 @@ maxPriorityFeePerGas  | Optional  |         | EIP1559 tip fee per gas
 nonce     | Optional  |         | the transaction nonce
 dappUrl   | Optional  |         | the URL of the dapp initiated the transaction
 
+## HTTP Response
+
+Parameter | Description
+--------- | -----------
+status    | "ok"
+data      | the result data, see the right side for details
+
+### Parameters in result data
+
+Field       | Description
+----------- | -----------
+risk_level  | -1: unknown risk, 0 ~ 5: the bigger the number, the higher the risk
+risk_detail | the result data, see the right side for details
+
+<aside class="notice">
+Discuss with us about an appropriate `risk_level` if you need to take certain actions based on it
+</aside>
 
 ## Token Security
 
@@ -444,13 +461,6 @@ fetch(url, {
 		"low_level_external_call": "0"
 	}
 }
-
-if atm the result is not available
-{
-	"code": "0",
-	"status": "in progress",
-	"pollAfter": 10
-}
 ```
 
 This endpoint returns all of the risk info about the requested token.
@@ -463,5 +473,13 @@ This endpoint returns all of the risk info about the requested token.
 
 Parameter | Required? | Default | Description
 --------- | --------- | ------- | -----------
-chainId   | Yes       | 56      | The chain you want to check againt
+chainId   | Yes       | 56      | the chain you want to check againt
 address   | Yes       |         | the token address to be analyzed
+
+## HTTP Response
+
+Parameter | Description
+--------- | -----------
+status    | "ok" - if the result is update to date, "in progress" - if the result is temporarily unavailable
+pollAfter | poll after `pollAfter` seconds again if the result was unavailable
+data      | the result data, see the right side for details
