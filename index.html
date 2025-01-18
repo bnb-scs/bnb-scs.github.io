@@ -329,7 +329,13 @@
                     <a href="#transaction-security" class="toc-h2 toc-link" data-title="Transaction Security">Transaction Security</a>
                   </li>
                   <li>
+                    <a href="#http-response" class="toc-h2 toc-link" data-title="HTTP Response">HTTP Response</a>
+                  </li>
+                  <li>
                     <a href="#token-security" class="toc-h2 toc-link" data-title="Token Security">Token Security</a>
+                  </li>
+                  <li>
+                    <a href="#http-response-2" class="toc-h2 toc-link" data-title="HTTP Response">HTTP Response</a>
                   </li>
               </ul>
           </li>
@@ -395,7 +401,7 @@ curl <span class="nt">--request</span> POST <span class="se">\</span>
 <p>Make sure to replace <code>****</code> with your API key.</p>
 </blockquote>
 
-<p>HashDit uses API keys to allow access to the API. You can apply a new HashDit API key by contacting support@hashdit.io. It will be much appreciated if you could provide the following information in your email:</p>
+<p>HashDit uses API keys to allow access to the API. You can apply a new HashDit API key by contacting <strong>support@hashdit.io</strong>. It will be much appreciated if you could provide the following information in your email:</p>
 
 <ul>
 <li>Some background of your project, business scenario, etc.. for example: DeFi wallet Dex</li>
@@ -596,6 +602,42 @@ You must replace <code>****</code> with your real API key.
 <td>the URL of the dapp initiated the transaction</td>
 </tr>
 </tbody></table>
+<h2 id='http-response'>HTTP Response</h2>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>status</td>
+<td>&quot;ok&quot;</td>
+</tr>
+<tr>
+<td>data</td>
+<td>the result data, see the right side for details</td>
+</tr>
+</tbody></table>
+<h3 id='parameters-in-result-data'>Parameters in result data</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>risk_level</td>
+<td>-1: unknown risk, 0 ~ 5: the bigger the number, the higher the risk</td>
+</tr>
+<tr>
+<td>risk_detail</td>
+<td>the result data, see the right side for details</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+Discuss with us about an appropriate `risk_level` if you need to take certain actions based on it
+</aside>
 <h2 id='token-security'>Token Security</h2><div class="highlight"><pre class="highlight go tab-go"><code><span class="k">package</span> <span class="n">main</span>
 
 <span class="k">import</span> <span class="p">(</span>
@@ -786,13 +828,6 @@ You must replace <code>****</code> with your real API key.
         </span><span class="nl">"low_level_external_call"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-
-</span><span class="err">if</span><span class="w"> </span><span class="err">atm</span><span class="w"> </span><span class="err">the</span><span class="w"> </span><span class="err">result</span><span class="w"> </span><span class="err">is</span><span class="w"> </span><span class="err">not</span><span class="w"> </span><span class="err">available</span><span class="w">
-</span><span class="p">{</span><span class="w">
-    </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"in progress"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"pollAfter"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-</span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>This endpoint returns all of the risk info about the requested token.</p>
 <h3 id='http-request-2'>HTTP Request</h3>
@@ -810,7 +845,7 @@ You must replace <code>****</code> with your real API key.
 <td>chainId</td>
 <td>Yes</td>
 <td>56</td>
-<td>The chain you want to check againt</td>
+<td>the chain you want to check againt</td>
 </tr>
 <tr>
 <td>address</td>
@@ -819,10 +854,30 @@ You must replace <code>****</code> with your real API key.
 <td>the token address to be analyzed</td>
 </tr>
 </tbody></table>
+<h2 id='http-response-2'>HTTP Response</h2>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>status</td>
+<td>&quot;ok&quot; - if the result is update to date, &quot;in progress&quot; - if the result is temporarily unavailable</td>
+</tr>
+<tr>
+<td>pollAfter</td>
+<td>poll after <code>pollAfter</code> seconds again if the result was unavailable</td>
+</tr>
+<tr>
+<td>data</td>
+<td>the result data, see the right side for details</td>
+</tr>
+</tbody></table>
 <h1 id='errors'>Errors</h1>
 <table><thead>
 <tr>
-<th>Error Code</th>
+<th>HTTP Code</th>
 <th>Meaning</th>
 </tr>
 </thead><tbody>
