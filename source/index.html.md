@@ -240,7 +240,7 @@ maxPriorityFeePerGas  | Optional  |         | EIP1559 tip fee per gas
 nonce     | Optional  |         | the transaction nonce
 dappUrl   | Optional  |         | the URL of the dapp initiated the transaction
 
-## HTTP Response
+### HTTP Response
 
 Parameter | Description
 --------- | -----------
@@ -476,7 +476,7 @@ Parameter | Required? | Default | Description
 chainId   | Yes       | 56      | the chain you want to check againt
 address   | Yes       |         | the token address to be analyzed
 
-## HTTP Response
+### HTTP Response
 
 Parameter | Description
 --------- | -----------
