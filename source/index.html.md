@@ -9,7 +9,6 @@ language_tabs: # must be one of https://github.com/rouge-ruby/rouge/wiki/List-of
 
 toc_footers:
   - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/slatedocs/slate'>Documentation Powered by Slate</a>
 
 includes:
   - errors
@@ -60,7 +59,7 @@ response = requests.post(url, json=payload, headers=headers)
 ```shell
 # With shell, you can just pass the correct header with each request
 curl --request POST \
-  --url https://service.hashdit.io/v2/hashdit/transaction-security \
+  --url https://api.diting.pro/v2/hashdit/transaction-security \
   --header 'Content-Type: application/json' \
   --header 'X-API-Key: ****' \
   --data '{
@@ -97,8 +96,13 @@ Then HashDit expects for the API key to be included in all API requests to the s
 `X-API-Key: ****`
 
 <aside class="notice">
-You must replace <code>****</code> with your real API key.
+  You must replace <code>****</code> with your real API key.
 </aside>
+
+<aside class="notice">
+  We will grant you the QA environment permission first, if everything works fine on QA we will proceed the production integration
+</aside>
+
 
 # Security APIs
 
@@ -114,7 +118,7 @@ import (
 )
 
 func main() {
-    url := "https://service.hashdit.io/v2/hashdit/transaction-security"
+    url := "https://api.diting.pro/v2/hashdit/transaction-security"
     method := "POST"
 
     payload := []byte(`{
@@ -145,7 +149,7 @@ func main() {
 ```python
 import requests
 
-url = "https://service.hashdit.io/v2/hashdit/transaction-security"
+url = "https://api.diting.pro/v2/hashdit/transaction-security"
 payload = {
     "chainId": 56,
     "to": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
@@ -163,7 +167,7 @@ print("Response Body:", response.text)
 
 ```shell
 curl --request POST \
-  --url https://service.hashdit.io/v2/hashdit/transaction-security \
+  --url https://api.diting.pro/v2/hashdit/transaction-security \
   --header 'Content-Type: application/json' \
   --header 'X-API-Key: ****' \
   --data '{
@@ -173,7 +177,7 @@ curl --request POST \
 ```
 
 ```javascript
-const url = "https://service.hashdit.io/v2/hashdit/transaction-security";
+const url = "https://api.diting.pro/v2/hashdit/transaction-security";
 const payload = {
     chainId: 56,
     to: "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
@@ -222,7 +226,7 @@ This endpoint returns the risk level and risk details about the requested transa
 
 ### HTTP Request
 
-`POST https://service.hashdit.io/v2/hashdit/transaction-security`
+`POST https://api.diting.pro/v2/hashdit/transaction-security`
 
 ### Post Parameters
 
@@ -270,7 +274,7 @@ import (
 )
 
 func main() {
-    url := "https://service.hashdit.io/v2/hashdit/token-security"
+    url := "https://api.diting.pro/v2/hashdit/token-security"
     method := "POST"
 
     payload := []byte(`{
@@ -301,7 +305,7 @@ func main() {
 ```python
 import requests
 
-url = "https://service.hashdit.io/v2/hashdit/token-security"
+url = "https://api.diting.pro/v2/hashdit/token-security"
 payload = {
     "chainId": 56,
     "address": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
@@ -319,7 +323,7 @@ print("Response Body:", response.text)
 
 ```shell
 curl --request POST \
-  --url https://service.hashdit.io/v2/hashdit/transaction-security \
+  --url https://api.diting.pro/v2/hashdit/transaction-security \
   --header 'Content-Type: application/json' \
   --header 'X-API-Key: ****' \
   --data '{
@@ -329,7 +333,7 @@ curl --request POST \
 ```
 
 ```javascript
-const url = "https://service.hashdit.io/v2/hashdit/transaction-security";
+const url = "https://api.diting.pro/v2/hashdit/transaction-security";
 const payload = {
     chainId: 56,
     address: "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
@@ -467,7 +471,7 @@ This endpoint returns all of the risk info about the requested token.
 
 ### HTTP Request
 
-`POST https://service.hashdit.io/v2/hashdit/token-security`
+`POST https://api.diting.pro/v2/hashdit/token-security`
 
 ### Post Parameters
 
