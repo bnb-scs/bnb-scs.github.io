@@ -511,13 +511,20 @@ curl <span class="nt">--request</span> POST <span class="se">\</span>
     </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ok"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"has_result"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"polling_interval"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
         </span><span class="nl">"risk_level"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
         </span><span class="nl">"risk_detail"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
             </span><span class="p">{</span><span class="w">
                 </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"is_in_wlist"</span><span class="p">,</span><span class="w">
                 </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The contract is relatively safe based on the threat intelligence."</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="nl">"urlData"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"risk_level"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"risk_detail"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"is_in_wlist"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The dApp is relatively safe based on the threat intelligence."</span><span class="w">
             </span><span class="p">}</span><span class="w">
         </span><span class="p">]</span><span class="w">
     </span><span class="p">}</span><span class="w">
@@ -615,16 +622,44 @@ curl <span class="nt">--request</span> POST <span class="se">\</span>
 </tr>
 <tr>
 <td>data</td>
-<td>the result data, see the right side for details</td>
+<td>the address analysis result, see the right side for details</td>
+</tr>
+<tr>
+<td>urlData</td>
+<td>the url analysis result, see the right side for details</td>
 </tr>
 </tbody></table>
-<h3 id='parameters-in-result-data'>Parameters in result data</h3>
+<h3 id='parameters-in-data'>Parameters in data</h3>
 <table><thead>
 <tr>
 <th>Field</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
+<tr>
+<td>risk_level</td>
+<td>-1: unknown risk, 0 ~ 5: the bigger the number, the higher the risk</td>
+</tr>
+<tr>
+<td>risk_detail</td>
+<td>the result data, see the right side for details</td>
+</tr>
+</tbody></table>
+<h3 id='parameters-in-urldata'>Parameters in urlData</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>shortlink</td>
+<td>true or false</td>
+</tr>
+<tr>
+<td>targetUrl</td>
+<td>the target URL of the requested shortlink</td>
+</tr>
 <tr>
 <td>risk_level</td>
 <td>-1: unknown risk, 0 ~ 5: the bigger the number, the higher the risk</td>
@@ -1009,7 +1044,7 @@ Discuss with us about an appropriate `risk_level` if you need to take certain ac
 <td>the result data, see the right side for details</td>
 </tr>
 </tbody></table>
-<h3 id='parameters-in-result-data-2'>Parameters in result data</h3>
+<h3 id='parameters-in-result-data'>Parameters in result data</h3>
 <table><thead>
 <tr>
 <th>Field</th>
