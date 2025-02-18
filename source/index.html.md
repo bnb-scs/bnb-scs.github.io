@@ -270,8 +270,6 @@ risk_detail | the result data, see the right side for details
 
 Field       | Description
 ----------- | -----------
-shortlink   | true or false
-targetUrl   | the target URL of the requested shortlink
 risk_level  | -1: unknown risk, 0 ~ 5: the bigger the number, the higher the risk
 risk_detail | the result data, see the right side for details
 
