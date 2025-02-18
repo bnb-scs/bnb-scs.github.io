@@ -323,7 +323,7 @@ print("Response Body:", response.text)
 
 ```shell
 curl --request POST \
-  --url https://api.diting.pro/v2/hashdit/transaction-security \
+  --url https://api.diting.pro/v2/hashdit/token-security \
   --header 'Content-Type: application/json' \
   --header 'X-API-Key: ****' \
   --data '{
@@ -333,7 +333,7 @@ curl --request POST \
 ```
 
 ```javascript
-const url = "https://api.diting.pro/v2/hashdit/transaction-security";
+const url = "https://api.diting.pro/v2/hashdit/token-security";
 const payload = {
     chainId: 56,
     address: "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
@@ -487,3 +487,148 @@ Parameter | Description
 status    | "ok" - if the result is update to date, "in progress" - if the result is temporarily unavailable
 pollAfter | poll after `pollAfter` seconds again if the result was unavailable
 data      | the result data, see the right side for details
+
+
+## Domain Security
+
+```go
+package main
+
+import (
+    "bytes"
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.diting.pro/v2/hashdit/domain-security"
+    method := "POST"
+
+    payload := []byte(`{
+        "url": "example.com"
+    }`)
+
+    client := &http.Client{}
+    req, err := http.NewRequest(method, url, bytes.NewBuffer(payload))
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    req.Header.Add("Content-Type", "application/json")
+    req.Header.Add("X-API-Key", "****")
+
+    res, err := client.Do(req)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    defer res.Body.Close()
+
+    fmt.Println("Response Status:", res.Status)
+}
+```
+
+```python
+import requests
+
+url = "https://api.diting.pro/v2/hashdit/domain-security"
+payload = {
+    "url": "example.com"
+}
+headers = {
+    "Content-Type": "application/json",
+    "X-API-Key": "****"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+
+print("Response Status:", response.status_code)
+print("Response Body:", response.text)
+```
+
+```shell
+curl --request POST \
+  --url https://api.diting.pro/v2/hashdit/domain-security \
+  --header 'Content-Type: application/json' \
+  --header 'X-API-Key: ****' \
+  --data '{
+  "url": "example.com"
+}'
+```
+
+```javascript
+const url = "https://api.diting.pro/v2/hashdit/domain-security";
+const payload = {
+    url: "example.com"
+};
+
+const headers = {
+    "Content-Type": "application/json",
+    "X-API-Key": "****"
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(payload)
+})
+.then(response => response.json())
+.then(data => {
+    console.log("Response Data:", data);
+})
+.catch(error => {
+    console.error("Error:", error);
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "code": "0",
+  "status": "ok",
+  "data": {
+    "risk_level": 5,
+    "risk_detail": [
+      {
+        "name": "is_in_blist",
+        "value": "There are potential risks in the dApp based on the threat intelligence."
+      },
+      {
+        "name": "red_alarm",
+        "value": "This dApp was marked as red alarm on: https://dappbay.bnbchain.org/detail/movai"
+      }
+    ]
+  }
+}
+```
+
+This endpoint returns all of the risk info about the requested url.
+
+### HTTP Request
+
+`POST https://api.diting.pro/v2/hashdit/domain-security`
+
+### Post Parameters
+
+Parameter | Required? | Default | Description
+--------- | --------- | ------- | -----------
+url       | Yes       |         | the url to be analyzed
+
+### HTTP Response
+
+Parameter | Description
+--------- | -----------
+status    | "ok" - if the request is successful
+data      | the result data, see the right side for details
+
+### Parameters in result data
+
+Field       | Description
+----------- | -----------
+risk_level  | -1: unknown risk, 0 ~ 5: the bigger the number, the higher the risk
+risk_detail | the result data, see the right side for details
+
+<aside class="notice">
+Discuss with us about an appropriate `risk_level` if you need to take certain actions based on it
+</aside>
