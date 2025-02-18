@@ -209,13 +209,20 @@ fetch(url, {
 	"code": "0",
 	"status": "ok",
 	"data": {
-		"has_result": true,
-		"polling_interval": 0,
 		"risk_level": 0,
 		"risk_detail": [
 			{
 				"name": "is_in_wlist",
 				"value": "The contract is relatively safe based on the threat intelligence."
+			}
+		]
+	}
+  "urlData": {
+		"risk_level": 1,
+		"risk_detail": [
+			{
+				"name": "is_in_wlist",
+				"value": "The dApp is relatively safe based on the threat intelligence."
 			}
 		]
 	}
@@ -249,12 +256,22 @@ dappUrl   | Optional  |         | the URL of the dapp initiated the transaction
 Parameter | Description
 --------- | -----------
 status    | "ok"
-data      | the result data, see the right side for details
+data      | the address analysis result, see the right side for details
+urlData   | the url analysis result, see the right side for details
 
-### Parameters in result data
+### Parameters in data
 
 Field       | Description
 ----------- | -----------
+risk_level  | -1: unknown risk, 0 ~ 5: the bigger the number, the higher the risk
+risk_detail | the result data, see the right side for details
+
+### Parameters in urlData
+
+Field       | Description
+----------- | -----------
+shortlink   | true or false
+targetUrl   | the target URL of the requested shortlink
 risk_level  | -1: unknown risk, 0 ~ 5: the bigger the number, the higher the risk
 risk_detail | the result data, see the right side for details
 
