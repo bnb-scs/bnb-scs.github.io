@@ -277,6 +277,151 @@ risk_detail | the result data, see the right side for details
 Discuss with us about an appropriate `risk_level` if you need to take certain actions based on it
 </aside>
 
+## Address Security
+
+```go
+package main
+
+import (
+    "bytes"
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.diting.pro/v2/hashdit/address-security"
+    method := "POST"
+
+    payload := []byte(`{
+        "chainId": 56,
+        "to": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+    }`)
+
+    client := &http.Client{}
+    req, err := http.NewRequest(method, url, bytes.NewBuffer(payload))
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    req.Header.Add("Content-Type", "application/json")
+    req.Header.Add("X-API-Key", "****")
+
+    res, err := client.Do(req)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    defer res.Body.Close()
+
+    fmt.Println("Response Status:", res.Status)
+}
+```
+
+```python
+import requests
+
+url = "https://api.diting.pro/v2/hashdit/address-security"
+payload = {
+    "chainId": 56,
+    "to": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+}
+headers = {
+    "Content-Type": "application/json",
+    "X-API-Key": "****"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+
+print("Response Status:", response.status_code)
+print("Response Body:", response.text)
+```
+
+```shell
+curl --request POST \
+  --url https://api.diting.pro/v2/hashdit/address-security \
+  --header 'Content-Type: application/json' \
+  --header 'X-API-Key: ****' \
+  --data '{
+  "chainId": 56,
+  "to": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+}'
+```
+
+```javascript
+const url = "https://api.diting.pro/v2/hashdit/address-security";
+const payload = {
+    chainId: 56,
+    to: "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+};
+
+const headers = {
+    "Content-Type": "application/json",
+    "X-API-Key": "****"
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(payload)
+})
+.then(response => response.json())
+.then(data => {
+    console.log("Response Data:", data);
+})
+.catch(error => {
+    console.error("Error:", error);
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+	"code": "0",
+	"status": "ok",
+	"data": {
+		"risk_level": 0,
+		"risk_detail": [
+			{
+				"name": "is_in_wlist",
+				"value": "The contract is relatively safe based on the threat intelligence."
+			}
+		]
+	}
+}
+```
+
+This endpoint returns the risk level and risk details about the requested transaction.
+
+### HTTP Request
+
+`POST https://api.diting.pro/v2/hashdit/address-security`
+
+### Post Parameters
+
+Parameter | Required? | Default | Description
+--------- | --------- | ------- | -----------
+chainId   | Yes       | 56      | The chain you want to check againt
+address   | Yes       |         | the target address of the transaction
+
+### HTTP Response
+
+Parameter | Description
+--------- | -----------
+status    | "ok"
+data      | the address analysis result, see the right side for details
+
+### Parameters in data
+
+Field       | Description
+----------- | -----------
+risk_level  | -1: unknown risk, 0 ~ 5: the bigger the number, the higher the risk
+risk_detail | the result data, see the right side for details
+
+<aside class="notice">
+Discuss with us about an appropriate `risk_level` if you need to take certain actions based on it
+</aside>
+
 ## Token Security
 
 ```go
