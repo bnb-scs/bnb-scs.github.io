@@ -103,6 +103,12 @@ Then HashDit expects for the API key to be included in all API requests to the s
   We will grant you the QA environment permission first, if everything works fine on QA we will proceed the production integration
 </aside>
 
+# Domain
+
+Env        | domain
+---------- | ---------
+QA         | api.diting.pro
+Production | service.hashdit.io
 
 # Security APIs
 
