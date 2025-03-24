@@ -323,6 +323,9 @@
             <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
           </li>
           <li>
+            <a href="#domain" class="toc-h1 toc-link" data-title="Domain">Domain</a>
+          </li>
+          <li>
             <a href="#security-apis" class="toc-h1 toc-link" data-title="Security APIs">Security APIs</a>
               <ul class="toc-list-h2">
                   <li>
@@ -424,6 +427,22 @@ curl <span class="nt">--request</span> POST <span class="se">\</span>
 <aside class="notice">
   We will grant you the QA environment permission first, if everything works fine on QA we will proceed the production integration
 </aside>
+<h1 id='domain'>Domain</h1>
+<table><thead>
+<tr>
+<th>Env</th>
+<th>domain</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>QA</td>
+<td>api.diting.pro</td>
+</tr>
+<tr>
+<td>Production</td>
+<td>service.hashdit.io</td>
+</tr>
+</tbody></table>
 <h1 id='security-apis'>Security APIs</h1><h2 id='transaction-security'>Transaction Security</h2><div class="highlight"><pre class="highlight go tab-go"><code><span class="k">package</span> <span class="n">main</span>
 
 <span class="k">import</span> <span class="p">(</span>
