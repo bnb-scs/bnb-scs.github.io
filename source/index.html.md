@@ -428,6 +428,204 @@ risk_detail | the result data, see the right side for details
 Discuss with us about an appropriate `risk_level` if you need to take certain actions based on it
 </aside>
 
+## Batch Address Security
+
+```go
+package main
+
+import (
+    "bytes"
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    url := "https://api.diting.pro/v2/hashdit/batch-address-security"
+    method := "POST"
+
+    payload := []byte(`[
+        {
+            "chainId": 56,
+            "address": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+        },
+        {
+            "address": "0xfa7fee97951fb46675410aef89c9f3f6dd93f042"
+        }
+    ]`)
+
+    client := &http.Client{}
+    req, err := http.NewRequest(method, url, bytes.NewBuffer(payload))
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    req.Header.Add("Content-Type", "application/json")
+    req.Header.Add("X-API-Key", "****")
+
+    res, err := client.Do(req)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    defer res.Body.Close()
+
+    fmt.Println("Response Status:", res.Status)
+}
+```
+
+```python
+import requests
+
+url = "https://api.diting.pro/v2/hashdit/batch-address-security"
+payload = [
+    {
+        "chainId": 56,
+        "address": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+    },
+    {
+        "address": "0xfa7fee97951fb46675410aef89c9f3f6dd93f042"
+    }
+]
+headers = {
+    "Content-Type": "application/json",
+    "X-API-Key": "****"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+
+print("Response Status:", response.status_code)
+print("Response Body:", response.text)
+```
+
+```shell
+curl --request POST \
+  --url https://api.diting.pro/v2/hashdit/batch-address-security \
+  --header 'Content-Type: application/json' \
+  --header 'X-API-Key: ****' \
+  --data '[{
+  "chainId": 56,
+  "address": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+},{"address": "0xfa7fee97951fb46675410aef89c9f3f6dd93f042"}]'
+```
+
+```javascript
+const url = "https://api.diting.pro/v2/hashdit/batch-address-security";
+const payload = [{
+    chainId: 56,
+    address: "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+}, {
+    address: "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+}];
+
+const headers = {
+    "Content-Type": "application/json",
+    "X-API-Key": "****"
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(payload)
+})
+.then(response => response.json())
+.then(data => {
+    console.log("Response Data:", data);
+})
+.catch(error => {
+    console.error("Error:", error);
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+	"code": "0",
+	"status": "ok",
+	"data": [
+		{
+			"request_id": "bc95bfb7-7936-4cb1-a863-2ceff394a5a4",
+			"has_result": true,
+			"polling_interval": 0,
+			"risk_level": 4,
+			"risk_detail": [
+				{
+					"name": "is_in_blist",
+					"value": "There are potential risks in the contract based on the threat intelligence."
+				}
+			]
+		},
+		{
+			"request_id": "bc95bfb7-7936-4cb1-a863-2ceff394a5a4",
+			"has_result": true,
+			"polling_interval": 0,
+			"risk_level": 1,
+			"risk_detail": []
+		},
+		{
+			"request_id": "bc95bfb7-7936-4cb1-a863-2ceff394a5a4",
+			"has_result": true,
+			"polling_interval": 0,
+			"risk_level": 4,
+			"risk_detail": [
+				{
+					"name": "is_in_blist",
+					"value": "There are potential risks in the contract based on security analysis model."
+				}
+			]
+		},
+		{
+			"request_id": "bc95bfb7-7936-4cb1-a863-2ceff394a5a4",
+			"has_result": true,
+			"polling_interval": 0,
+			"risk_level": 1,
+			"risk_detail": []
+		},
+		{
+			"request_id": "bc95bfb7-7936-4cb1-a863-2ceff394a5a4",
+			"has_result": true,
+			"polling_interval": 0,
+			"risk_level": 1,
+			"risk_detail": []
+		}
+	]
+}
+```
+
+This endpoint returns the risk level and risk details about the requested transaction.
+
+### HTTP Request
+
+`POST https://api.diting.pro/v2/hashdit/address-security`
+
+### Post Parameters
+
+The array of:
+
+Parameter | Required? | Default | Description
+--------- | --------- | ------- | -----------
+chainId   | No       |       | if not specified, we will run against all of the chains we supported, which are: bnbchain, ethereum, opbnb, polygon these 4 chains ATM
+address   | Yes       |         | the target address of the transaction
+
+### HTTP Response
+
+Parameter | Description
+--------- | -----------
+status    | "ok"
+data      | the address analysis result, see the right side for details
+
+### Parameters in data
+
+Field       | Description
+----------- | -----------
+risk_level  | -1: unknown risk, 0 ~ 5: the bigger the number, the higher the risk
+risk_detail | the result data, see the right side for details
+
+<aside class="notice">
+Discuss with us about an appropriate `risk_level` if you need to take certain actions based on it
+</aside>
+
+
 ## Token Security
 
 ```go
