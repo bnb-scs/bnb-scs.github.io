@@ -596,7 +596,7 @@ This endpoint returns the risk level and risk details about the requested transa
 
 ### HTTP Request
 
-`POST https://api.diting.pro/v2/hashdit/address-security`
+`POST https://api.diting.pro/v2/hashdit/batch-address-security`
 
 ### Post Parameters
 
