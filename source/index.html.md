@@ -128,8 +128,11 @@ func main() {
     method := "POST"
 
     payload := []byte(`{
-        "chainId": 56,
-        "to": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+	"from": "0xf977814e90da44bfa03b6295a0616a897441acec",
+	"to": "0x55d398326f99059fF775485246999027B3197955",
+	"data": "0x095ea7b3000000000000000000000000d99d1c33f9fc3444f8101754abc46c52416550d1ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+	"dappUrl": "https://claim-linea.com",
+	"chainId": 56
     }`)
 
     client := &http.Client{}
@@ -157,8 +160,11 @@ import requests
 
 url = "https://api.diting.pro/v2/hashdit/transaction-security"
 payload = {
-    "chainId": 56,
-    "to": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+	"from": "0xf977814e90da44bfa03b6295a0616a897441acec",
+	"to": "0x55d398326f99059fF775485246999027B3197955",
+	"data": "0x095ea7b3000000000000000000000000d99d1c33f9fc3444f8101754abc46c52416550d1ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+	"dappUrl": "https://claim-linea.com",
+	"chainId": 56
 }
 headers = {
     "Content-Type": "application/json",
@@ -177,16 +183,22 @@ curl --request POST \
   --header 'Content-Type: application/json' \
   --header 'X-API-Key: ****' \
   --data '{
-  "chainId": 56,
-  "to": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+	"from": "0xf977814e90da44bfa03b6295a0616a897441acec",
+	"to": "0x55d398326f99059fF775485246999027B3197955",
+	"data": "0x095ea7b3000000000000000000000000d99d1c33f9fc3444f8101754abc46c52416550d1ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+	"dappUrl": "https://claim-linea.com",
+	"chainId": 56
 }'
 ```
 
 ```javascript
 const url = "https://api.diting.pro/v2/hashdit/transaction-security";
 const payload = {
-    chainId: 56,
-    to: "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+	from: "0xf977814e90da44bfa03b6295a0616a897441acec",
+	to: "0x55d398326f99059fF775485246999027B3197955",
+	data: "0x095ea7b3000000000000000000000000d99d1c33f9fc3444f8101754abc46c52416550d1ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+	dappUrl: "https://claim-linea.com",
+	chainId: 56
 };
 
 const headers = {
@@ -212,26 +224,37 @@ fetch(url, {
 
 ```json
 {
-	"code": "0",
-	"status": "ok",
-	"data": {
-		"risk_level": 0,
-		"risk_detail": [
-			{
-				"name": "is_in_wlist",
-				"value": "The contract is relatively safe based on the threat intelligence."
-			}
-		]
-	}
-  "urlData": {
-		"risk_level": 1,
-		"risk_detail": [
-			{
-				"name": "is_in_wlist",
-				"value": "The dApp is relatively safe based on the threat intelligence."
-			}
-		]
-	}
+	"tx_hash": "",
+	"chain": "bsc",
+	"url": "https://bscscan.com/tx/None",
+	"from": "0xF977814e90dA44bFA03b6295A0616a897441aceC",
+	"to": "0x55d398326f99059fF775485246999027B3197955",
+	"value": "0x0",
+	"value_in_eth": 0,
+	"gas_used": "0x0",
+	"status": true,
+	"method": "approve(address,uint256)",
+	"transaction_fee": 0,
+	"overall_risk": 5,
+	"risk_description": "High Risk",
+	"risk_details": [
+		{
+			"name": "unlimited_EOA_approval",
+			"value": "0xD99D1c33F9fC3444f8101754aBC46c52416550D1",
+			"value_type": "address",
+			"risk": 4,
+			"risk_name": "High Risk",
+			"description": "Using 'approve' for unlimited tokens to an EOA address: 0xD99D1c33F9fC3444f8101754aBC46c52416550D1.\nYou are using 'approve' for unlimited tokens to a personal wallet (EOA) rather than a contract. This is unusual and potentially risky as EOAs are controlled by individuals."
+		},
+		{
+			"name": "dapp_risk",
+			"value": "https://claim-linea.com",
+			"value_type": "url",
+			"risk": 5,
+			"risk_name": "Critical Risk",
+			"description": "There are potential risks in the dApp based on the threat intelligence."
+		}
+	]
 }
 ```
 
