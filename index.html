@@ -459,8 +459,11 @@ curl <span class="nt">--request</span> POST <span class="se">\</span>
     <span class="n">method</span> <span class="o">:=</span> <span class="s">"POST"</span>
 
     <span class="n">payload</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">(</span><span class="s">`{
-        "chainId": 56,
-        "to": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+    "from": "0xf977814e90da44bfa03b6295a0616a897441acec",
+    "to": "0x55d398326f99059fF775485246999027B3197955",
+    "data": "0x095ea7b3000000000000000000000000d99d1c33f9fc3444f8101754abc46c52416550d1ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "dappUrl": "https://claim-linea.com",
+    "chainId": 56
     }`</span><span class="p">)</span>
 
     <span class="n">client</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">http</span><span class="o">.</span><span class="n">Client</span><span class="p">{}</span>
@@ -485,8 +488,11 @@ curl <span class="nt">--request</span> POST <span class="se">\</span>
 
 <span class="n">url</span> <span class="o">=</span> <span class="s">"https://api.diting.pro/v2/hashdit/transaction-security"</span>
 <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">"chainId"</span><span class="p">:</span> <span class="mi">56</span><span class="p">,</span>
-    <span class="s">"to"</span><span class="p">:</span> <span class="s">"0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"</span>
+    <span class="s">"from"</span><span class="p">:</span> <span class="s">"0xf977814e90da44bfa03b6295a0616a897441acec"</span><span class="p">,</span>
+    <span class="s">"to"</span><span class="p">:</span> <span class="s">"0x55d398326f99059fF775485246999027B3197955"</span><span class="p">,</span>
+    <span class="s">"data"</span><span class="p">:</span> <span class="s">"0x095ea7b3000000000000000000000000d99d1c33f9fc3444f8101754abc46c52416550d1ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"</span><span class="p">,</span>
+    <span class="s">"dappUrl"</span><span class="p">:</span> <span class="s">"https://claim-linea.com"</span><span class="p">,</span>
+    <span class="s">"chainId"</span><span class="p">:</span> <span class="mi">56</span>
 <span class="p">}</span>
 <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s">"Content-Type"</span><span class="p">:</span> <span class="s">"application/json"</span><span class="p">,</span>
@@ -502,13 +508,19 @@ curl <span class="nt">--request</span> POST <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'X-API-Key: ****'</span> <span class="se">\</span>
   <span class="nt">--data</span> <span class="s1">'{
-  "chainId": 56,
-  "to": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
+    "from": "0xf977814e90da44bfa03b6295a0616a897441acec",
+    "to": "0x55d398326f99059fF775485246999027B3197955",
+    "data": "0x095ea7b3000000000000000000000000d99d1c33f9fc3444f8101754abc46c52416550d1ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "dappUrl": "https://claim-linea.com",
+    "chainId": 56
 }'</span>
 </code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">https://api.diting.pro/v2/hashdit/transaction-security</span><span class="dl">"</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="na">chainId</span><span class="p">:</span> <span class="mi">56</span><span class="p">,</span>
-    <span class="na">to</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0xa7a5db3d94810ac366ab663f6fd71e6b795d8538</span><span class="dl">"</span>
+    <span class="na">from</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0xf977814e90da44bfa03b6295a0616a897441acec</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">to</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x55d398326f99059fF775485246999027B3197955</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">data</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x095ea7b3000000000000000000000000d99d1c33f9fc3444f8101754abc46c52416550d1ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">dappUrl</span><span class="p">:</span> <span class="dl">"</span><span class="s2">https://claim-linea.com</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">chainId</span><span class="p">:</span> <span class="mi">56</span>
 <span class="p">};</span>
 
 <span class="kd">const</span> <span class="nx">headers</span> <span class="o">=</span> <span class="p">{</span>
@@ -533,26 +545,37 @@ curl <span class="nt">--request</span> POST <span class="se">\</span>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ok"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"risk_level"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"risk_detail"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-            </span><span class="p">{</span><span class="w">
-                </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"is_in_wlist"</span><span class="p">,</span><span class="w">
-                </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The contract is relatively safe based on the threat intelligence."</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="nl">"urlData"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"risk_level"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"risk_detail"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-            </span><span class="p">{</span><span class="w">
-                </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"is_in_wlist"</span><span class="p">,</span><span class="w">
-                </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The dApp is relatively safe based on the threat intelligence."</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-    </span><span class="p">}</span><span class="w">
+    </span><span class="nl">"tx_hash"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"chain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bsc"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://bscscan.com/tx/None"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xF977814e90dA44bFA03b6295A0616a897441aceC"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x55d398326f99059fF775485246999027B3197955"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"value_in_eth"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"gas_used"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"method"</span><span class="p">:</span><span class="w"> </span><span class="s2">"approve(address,uint256)"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"transaction_fee"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"overall_risk"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"risk_description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"High Risk"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"risk_details"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unlimited_EOA_approval"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xD99D1c33F9fC3444f8101754aBC46c52416550D1"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"value_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"address"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"risk"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"risk_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"High Risk"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Using 'approve' for unlimited tokens to an EOA address: 0xD99D1c33F9fC3444f8101754aBC46c52416550D1.</span><span class="se">\n</span><span class="s2">You are using 'approve' for unlimited tokens to a personal wallet (EOA) rather than a contract. This is unusual and potentially risky as EOAs are controlled by individuals."</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dapp_risk"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://claim-linea.com"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"value_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"url"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"risk"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"risk_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Critical Risk"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"There are potential risks in the dApp based on the threat intelligence."</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>This endpoint returns the risk level and risk details about the requested transaction.</p>
