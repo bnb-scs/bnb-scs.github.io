@@ -59,7 +59,7 @@ response = requests.post(url, json=payload, headers=headers)
 ```shell
 # With shell, you can just pass the correct header with each request
 curl --request POST \
-  --url https://api.diting.pro/v2/hashdit/transaction-security \
+  --url https://service.hashdit.io/v2/hashdit/transaction-security \
   --header 'Content-Type: application/json' \
   --header 'X-API-Key: ****' \
   --data '{
@@ -87,9 +87,9 @@ HashDit uses API keys to allow access to the API. You can apply a new HashDit AP
 
 * Some background of your project, business scenario, etc.. for example: DeFi wallet Dex
 * When will your business be fully in production?
-* What’s your rollout plan in production?
+* What's your rollout plan in production?
   * like 10% on Dec 10th, 50% on Dec 15th, ...
-* What’s the estimated QPS you will put on our API when fully roll out?
+* What's the estimated QPS you will put on our API when fully roll out?
 
 Then HashDit expects for the API key to be included in all API requests to the server in a header that looks like the following:
 
@@ -107,10 +107,222 @@ Then HashDit expects for the API key to be included in all API requests to the s
 
 Env        | domain
 ---------- | ---------
-QA         | api.diting.pro
 Production | service.hashdit.io
 
 # Security APIs
+
+## Address Classify
+
+Classifies a blockchain address, returning its type, classification, verification status, and related metadata.
+
+```go
+package main
+
+import (
+    "bytes"
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    url := "https://service.hashdit.io/v2/hashdit/address-classify"
+    method := "POST"
+
+    payload := []byte(`{
+	"address": "0x55d398326f99059fF775485246999027B3197955",
+	"chainId": 56
+    }`)
+
+    client := &http.Client{}
+    req, err := http.NewRequest(method, url, bytes.NewBuffer(payload))
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    req.Header.Add("Content-Type", "application/json")
+    req.Header.Add("X-API-Key", "****")
+
+    res, err := client.Do(req)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    defer res.Body.Close()
+
+    fmt.Println("Response Status:", res.Status)
+}
+```
+
+```python
+import requests
+
+url = "https://service.hashdit.io/v2/hashdit/address-classify"
+payload = {
+	"address": "0x55d398326f99059fF775485246999027B3197955",
+	"chainId": 56
+}
+headers = {
+    "Content-Type": "application/json",
+    "X-API-Key": "****"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+
+print("Response Status:", response.status_code)
+print("Response Body:", response.text)
+```
+
+```shell
+curl --request POST \
+  --url https://service.hashdit.io/v2/hashdit/address-classify \
+  --header 'Content-Type: application/json' \
+  --header 'X-API-Key: ****' \
+  --data '{
+	"address": "0x55d398326f99059fF775485246999027B3197955",
+	"chainId": 56
+}'
+```
+
+```javascript
+const url = "https://service.hashdit.io/v2/hashdit/address-classify";
+const payload = {
+	address: "0x55d398326f99059fF775485246999027B3197955",
+	chainId: 56
+};
+
+const headers = {
+    "Content-Type": "application/json",
+    "X-API-Key": "****"
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(payload)
+})
+.then(response => response.json())
+.then(data => {
+    console.log("Response Data:", data);
+})
+.catch(error => {
+    console.error("Error:", error);
+});
+```
+
+
+### HTTP Request
+
+`POST https://service.hashdit.io/v2/hashdit/address-classify`
+
+#### Post Parameters
+
+| Name     | Type   | Required | Description                |
+|----------|--------|----------|----------------------------|
+| chainId  | string | Yes      | Chain ID (e.g., `"56"` for BSC) |
+| address  | string | Yes      | Address to classify (e.g., `"0xAb468a1Ba9A57C4f313A0fcD579FBD748F484599"`) |
+
+**Example Request:**
+
+```json
+{
+  "chainId": "56",
+  "address": "0xAb468a1Ba9A57C4f313A0fcD579FBD748F484599"
+}
+```
+
+---
+
+### Response
+
+#### Success (HTTP 200)
+
+| Name    | Type   | Description                |
+|---------|--------|----------------------------|
+| code    | string | Status code (`"0"` for success) |
+| status  | string | Status message (`"ok"`)    |
+| data    | object | Classification result      |
+
+**data Object Fields:**
+
+| Name             | Type    | Description                                      |
+|------------------|---------|--------------------------------------------------|
+| address          | string  | Full address with chain prefix                   |
+| classification   | string  | Classification label (e.g., `"Proxy"`)           |
+| classification_id| integer | Classification ID                                |
+| details          | object  | Additional details (see below)                   |
+| scanned_time     | integer | Unix timestamp of scan                           |
+| timestamp        | string  | ISO8601 timestamp of scan                        |
+
+**classification field values**
+
+The `classification` field in the Address Classify response indicates the type of the address. Its value can be one of the following:
+
+| Value         | Description |
+|-------------- |------------|
+| EOA           | Externally Owned Account (a regular user wallet) |
+| Unverified    | Contract or address whose type could not be verified |
+| Universal     | Universal contract type |
+| Factory       | Contract that deploys other contracts (factory pattern) |
+| Router        | Router contract (commonly used in DEXs) |
+| MasterChef    | MasterChef contract (commonly used in yield farming) |
+| Proxy         | Proxy contract (upgradeable contract pattern) |
+| ERC20Pair     | Liquidity pool pair contract (e.g., Uniswap/Sushiswap pair) |
+| ERC20         | ERC20 token contract |
+| ERC721        | ERC721 NFT contract |
+| ERC777        | ERC777 token contract |
+| ERC1155       | ERC1155 multi-token contract |
+| ERC4626       | ERC4626 tokenized vault contract |
+| EIP7702       | EIP-7702 account type |
+
+These values help you understand the nature of the address being classified. If you need more details about a specific classification, please contact support.
+
+**details field values:**
+
+| Name        | Type   | Description                |
+|-------------|--------|----------------------------|
+| is_verified | bool   | Whether the contract is verified |
+
+**Example Response:**
+
+```json
+{
+  "code": "0",
+  "status": "ok",
+  "data": {
+    "address": "bsc:0xAb468a1Ba9A57C4f313A0fcD579FBD748F484599",
+    "classification": "Proxy",
+    "classification_id": 5,
+    "details": {
+      "is_verified": true
+    },
+    "scanned_time": 1751447586,
+    "timestamp": "2025-07-02T09:13:11.769523",
+  }
+}
+```
+
+---
+
+### Error Responses
+
+- Standard HTTP error codes for invalid requests or server errors.
+- The `code` and `status` fields in the response will indicate the error.
+
+---
+
+### Example cURL
+
+```sh
+curl --request POST \
+  --url https://service.hashdit.io/v2/hashdit/address-classify \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "chainId": "56",
+    "address": "0xAb468a1Ba9A57C4f313A0fcD579FBD748F484599"
+}'
+```
+
+---
 
 ## Transaction Security
 
@@ -124,7 +336,7 @@ import (
 )
 
 func main() {
-    url := "https://api.diting.pro/v2/hashdit/transaction-security"
+    url := "https://service.hashdit.io/v2/hashdit/transaction-security"
     method := "POST"
 
     payload := []byte(`{
@@ -158,7 +370,7 @@ func main() {
 ```python
 import requests
 
-url = "https://api.diting.pro/v2/hashdit/transaction-security"
+url = "https://service.hashdit.io/v2/hashdit/transaction-security"
 payload = {
 	"from": "0xf977814e90da44bfa03b6295a0616a897441acec",
 	"to": "0x55d398326f99059fF775485246999027B3197955",
@@ -179,7 +391,7 @@ print("Response Body:", response.text)
 
 ```shell
 curl --request POST \
-  --url https://api.diting.pro/v2/hashdit/transaction-security \
+  --url https://service.hashdit.io/v2/hashdit/transaction-security \
   --header 'Content-Type: application/json' \
   --header 'X-API-Key: ****' \
   --data '{
@@ -192,7 +404,7 @@ curl --request POST \
 ```
 
 ```javascript
-const url = "https://api.diting.pro/v2/hashdit/transaction-security";
+const url = "https://service.hashdit.io/v2/hashdit/transaction-security";
 const payload = {
 	from: "0xf977814e90da44bfa03b6295a0616a897441acec",
 	to: "0x55d398326f99059fF775485246999027B3197955",
@@ -262,7 +474,7 @@ This endpoint returns the risk level and risk details about the requested transa
 
 ### HTTP Request
 
-`POST https://api.diting.pro/v2/hashdit/transaction-security`
+`POST https://service.hashdit.io/v2/hashdit/transaction-security`
 
 ### Post Parameters
 
@@ -285,22 +497,13 @@ dappUrl   | Optional  |         | the URL of the dapp initiated the transaction
 Parameter | Description
 --------- | -----------
 status    | "ok"
-data      | the address analysis result, see the right side for details
-urlData   | the url analysis result, see the right side for details
 
 ### Parameters in data
 
 Field       | Description
 ----------- | -----------
-risk_level  | -1: unknown risk, 0 ~ 5: the bigger the number, the higher the risk
-risk_detail | the result data, see the right side for details
-
-### Parameters in urlData
-
-Field       | Description
------------ | -----------
-risk_level  | -1: unknown risk, 0 ~ 5: the bigger the number, the higher the risk
-risk_detail | the result data, see the right side for details
+overall_risk  | -1: unknown risk, 0 ~ 5: the bigger the number, the higher the risk
+risk_details | the result data, see the right side for details
 
 <aside class="notice">
 Discuss with us about an appropriate `risk_level` if you need to take certain actions based on it
@@ -318,7 +521,7 @@ import (
 )
 
 func main() {
-    url := "https://api.diting.pro/v2/hashdit/address-security"
+    url := "https://service.hashdit.io/v2/hashdit/address-security"
     method := "POST"
 
     payload := []byte(`{
@@ -349,7 +552,7 @@ func main() {
 ```python
 import requests
 
-url = "https://api.diting.pro/v2/hashdit/address-security"
+url = "https://service.hashdit.io/v2/hashdit/address-security"
 payload = {
     "chainId": 56,
     "to": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
@@ -367,7 +570,7 @@ print("Response Body:", response.text)
 
 ```shell
 curl --request POST \
-  --url https://api.diting.pro/v2/hashdit/address-security \
+  --url https://service.hashdit.io/v2/hashdit/address-security \
   --header 'Content-Type: application/json' \
   --header 'X-API-Key: ****' \
   --data '{
@@ -377,7 +580,7 @@ curl --request POST \
 ```
 
 ```javascript
-const url = "https://api.diting.pro/v2/hashdit/address-security";
+const url = "https://service.hashdit.io/v2/hashdit/address-security";
 const payload = {
     chainId: 56,
     to: "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
@@ -424,7 +627,7 @@ This endpoint returns the risk level and risk details about the requested transa
 
 ### HTTP Request
 
-`POST https://api.diting.pro/v2/hashdit/address-security`
+`POST https://service.hashdit.io/v2/hashdit/address-security`
 
 ### Post Parameters
 
@@ -463,7 +666,7 @@ import (
 )
 
 func main() {
-    url := "https://api.diting.pro/v2/hashdit/batch-address-security"
+    url := "https://service.hashdit.io/v2/hashdit/batch-address-security"
     method := "POST"
 
     payload := []byte(`[
@@ -499,7 +702,7 @@ func main() {
 ```python
 import requests
 
-url = "https://api.diting.pro/v2/hashdit/batch-address-security"
+url = "https://service.hashdit.io/v2/hashdit/batch-address-security"
 payload = [
     {
         "chainId": 56,
@@ -522,7 +725,7 @@ print("Response Body:", response.text)
 
 ```shell
 curl --request POST \
-  --url https://api.diting.pro/v2/hashdit/batch-address-security \
+  --url https://service.hashdit.io/v2/hashdit/batch-address-security \
   --header 'Content-Type: application/json' \
   --header 'X-API-Key: ****' \
   --data '[{
@@ -532,7 +735,7 @@ curl --request POST \
 ```
 
 ```javascript
-const url = "https://api.diting.pro/v2/hashdit/batch-address-security";
+const url = "https://service.hashdit.io/v2/hashdit/batch-address-security";
 const payload = [{
     chainId: 56,
     address: "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
@@ -619,7 +822,7 @@ This endpoint returns the risk level and risk details about the requested transa
 
 ### HTTP Request
 
-`POST https://api.diting.pro/v2/hashdit/batch-address-security`
+`POST https://service.hashdit.io/v2/hashdit/batch-address-security`
 
 ### Post Parameters
 
@@ -661,7 +864,7 @@ import (
 )
 
 func main() {
-    url := "https://api.diting.pro/v2/hashdit/token-security"
+    url := "https://service.hashdit.io/v2/hashdit/token-security"
     method := "POST"
 
     payload := []byte(`{
@@ -692,7 +895,7 @@ func main() {
 ```python
 import requests
 
-url = "https://api.diting.pro/v2/hashdit/token-security"
+url = "https://service.hashdit.io/v2/hashdit/token-security"
 payload = {
     "chainId": 56,
     "address": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
@@ -710,7 +913,7 @@ print("Response Body:", response.text)
 
 ```shell
 curl --request POST \
-  --url https://api.diting.pro/v2/hashdit/token-security \
+  --url https://service.hashdit.io/v2/hashdit/token-security \
   --header 'Content-Type: application/json' \
   --header 'X-API-Key: ****' \
   --data '{
@@ -720,7 +923,7 @@ curl --request POST \
 ```
 
 ```javascript
-const url = "https://api.diting.pro/v2/hashdit/token-security";
+const url = "https://service.hashdit.io/v2/hashdit/token-security";
 const payload = {
     chainId: 56,
     address: "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
@@ -858,7 +1061,7 @@ This endpoint returns all of the risk info about the requested token.
 
 ### HTTP Request
 
-`POST https://api.diting.pro/v2/hashdit/token-security`
+`POST https://service.hashdit.io/v2/hashdit/token-security`
 
 ### Post Parameters
 
@@ -888,7 +1091,7 @@ import (
 )
 
 func main() {
-    url := "https://api.diting.pro/v2/hashdit/domain-security"
+    url := "https://service.hashdit.io/v2/hashdit/domain-security"
     method := "POST"
 
     payload := []byte(`{
@@ -918,7 +1121,7 @@ func main() {
 ```python
 import requests
 
-url = "https://api.diting.pro/v2/hashdit/domain-security"
+url = "https://service.hashdit.io/v2/hashdit/domain-security"
 payload = {
     "url": "example.com"
 }
@@ -935,7 +1138,7 @@ print("Response Body:", response.text)
 
 ```shell
 curl --request POST \
-  --url https://api.diting.pro/v2/hashdit/domain-security \
+  --url https://service.hashdit.io/v2/hashdit/domain-security \
   --header 'Content-Type: application/json' \
   --header 'X-API-Key: ****' \
   --data '{
@@ -944,7 +1147,7 @@ curl --request POST \
 ```
 
 ```javascript
-const url = "https://api.diting.pro/v2/hashdit/domain-security";
+const url = "https://service.hashdit.io/v2/hashdit/domain-security";
 const payload = {
     url: "example.com"
 };
@@ -994,7 +1197,7 @@ This endpoint returns all of the risk info about the requested url.
 
 ### HTTP Request
 
-`POST https://api.diting.pro/v2/hashdit/domain-security`
+`POST https://service.hashdit.io/v2/hashdit/domain-security`
 
 ### Post Parameters
 
