@@ -329,6 +329,9 @@
             <a href="#security-apis" class="toc-h1 toc-link" data-title="Security APIs">Security APIs</a>
               <ul class="toc-list-h2">
                   <li>
+                    <a href="#address-classify" class="toc-h2 toc-link" data-title="Address Classify">Address Classify</a>
+                  </li>
+                  <li>
                     <a href="#transaction-security" class="toc-h2 toc-link" data-title="Transaction Security">Transaction Security</a>
                   </li>
                   <li>
@@ -384,7 +387,7 @@
 <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
 </code></pre></div><div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># With shell, you can just pass the correct header with each request</span>
 curl <span class="nt">--request</span> POST <span class="se">\</span>
-  <span class="nt">--url</span> https://api.diting.pro/v2/hashdit/transaction-security <span class="se">\</span>
+  <span class="nt">--url</span> https://service.hashdit.io/v2/hashdit/transaction-security <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'X-API-Key: ****'</span> <span class="se">\</span>
   <span class="nt">--data</span> <span class="s1">'{
@@ -411,12 +414,12 @@ curl <span class="nt">--request</span> POST <span class="se">\</span>
 <ul>
 <li>Some background of your project, business scenario, etc.. for example: DeFi wallet Dex</li>
 <li>When will your business be fully in production?</li>
-<li>What’s your rollout plan in production?
+<li>What&#39;s your rollout plan in production?
 
 <ul>
 <li>like 10% on Dec 10th, 50% on Dec 15th, ...</li>
 </ul></li>
-<li>What’s the estimated QPS you will put on our API when fully roll out?</li>
+<li>What&#39;s the estimated QPS you will put on our API when fully roll out?</li>
 </ul>
 
 <p>Then HashDit expects for the API key to be included in all API requests to the server in a header that looks like the following:</p>
@@ -438,15 +441,13 @@ curl <span class="nt">--request</span> POST <span class="se">\</span>
 </tr>
 </thead><tbody>
 <tr>
-<td>QA</td>
-<td>api.diting.pro</td>
-</tr>
-<tr>
 <td>Production</td>
 <td>service.hashdit.io</td>
 </tr>
 </tbody></table>
-<h1 id='security-apis'>Security APIs</h1><h2 id='transaction-security'>Transaction Security</h2><div class="highlight"><pre class="highlight go tab-go"><code><span class="k">package</span> <span class="n">main</span>
+<h1 id='security-apis'>Security APIs</h1><h2 id='address-classify'>Address Classify</h2>
+<p>Classifies a blockchain address, returning its type, classification, verification status, and related metadata.</p>
+<div class="highlight"><pre class="highlight go tab-go"><code><span class="k">package</span> <span class="n">main</span>
 
 <span class="k">import</span> <span class="p">(</span>
     <span class="s">"bytes"</span>
@@ -455,7 +456,306 @@ curl <span class="nt">--request</span> POST <span class="se">\</span>
 <span class="p">)</span>
 
 <span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">url</span> <span class="o">:=</span> <span class="s">"https://api.diting.pro/v2/hashdit/transaction-security"</span>
+    <span class="n">url</span> <span class="o">:=</span> <span class="s">"https://service.hashdit.io/v2/hashdit/address-classify"</span>
+    <span class="n">method</span> <span class="o">:=</span> <span class="s">"POST"</span>
+
+    <span class="n">payload</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">(</span><span class="s">`{
+    "address": "0x55d398326f99059fF775485246999027B3197955",
+    "chainId": 56
+    }`</span><span class="p">)</span>
+
+    <span class="n">client</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="n">http</span><span class="o">.</span><span class="n">Client</span><span class="p">{}</span>
+    <span class="n">req</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">http</span><span class="o">.</span><span class="n">NewRequest</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">bytes</span><span class="o">.</span><span class="n">NewBuffer</span><span class="p">(</span><span class="n">payload</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="n">req</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">"Content-Type"</span><span class="p">,</span> <span class="s">"application/json"</span><span class="p">)</span>
+    <span class="n">req</span><span class="o">.</span><span class="n">Header</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="s">"X-API-Key"</span><span class="p">,</span> <span class="s">"****"</span><span class="p">)</span>
+
+    <span class="n">res</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">client</span><span class="o">.</span><span class="n">Do</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+        <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="p">}</span>
+    <span class="k">defer</span> <span class="n">res</span><span class="o">.</span><span class="n">Body</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span>
+
+    <span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"Response Status:"</span><span class="p">,</span> <span class="n">res</span><span class="o">.</span><span class="n">Status</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://service.hashdit.io/v2/hashdit/address-classify"</span>
+<span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">"address"</span><span class="p">:</span> <span class="s">"0x55d398326f99059fF775485246999027B3197955"</span><span class="p">,</span>
+    <span class="s">"chainId"</span><span class="p">:</span> <span class="mi">56</span>
+<span class="p">}</span>
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">"Content-Type"</span><span class="p">:</span> <span class="s">"application/json"</span><span class="p">,</span>
+    <span class="s">"X-API-Key"</span><span class="p">:</span> <span class="s">"****"</span>
+<span class="p">}</span>
+
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"Response Status:"</span><span class="p">,</span> <span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Response Body:"</span><span class="p">,</span> <span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--request</span> POST <span class="se">\</span>
+  <span class="nt">--url</span> https://service.hashdit.io/v2/hashdit/address-classify <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'X-API-Key: ****'</span> <span class="se">\</span>
+  <span class="nt">--data</span> <span class="s1">'{
+    "address": "0x55d398326f99059fF775485246999027B3197955",
+    "chainId": 56
+}'</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">https://service.hashdit.io/v2/hashdit/address-classify</span><span class="dl">"</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">address</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x55d398326f99059fF775485246999027B3197955</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">chainId</span><span class="p">:</span> <span class="mi">56</span>
+<span class="p">};</span>
+
+<span class="kd">const</span> <span class="nx">headers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">X-API-Key</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">****</span><span class="dl">"</span>
+<span class="p">};</span>
+
+<span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">method</span><span class="p">:</span> <span class="dl">"</span><span class="s2">POST</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">headers</span><span class="p">:</span> <span class="nx">headers</span><span class="p">,</span>
+    <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">payload</span><span class="p">)</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">response</span> <span class="o">=&gt;</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">())</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">data</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">Response Data:</span><span class="dl">"</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="dl">"</span><span class="s2">Error:</span><span class="dl">"</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div><h3 id='http-request'>HTTP Request</h3>
+<p><code>POST https://service.hashdit.io/v2/hashdit/address-classify</code></p>
+<h4 id='post-parameters'>Post Parameters</h4>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>chainId</td>
+<td>string</td>
+<td>Yes</td>
+<td>Chain ID (e.g., <code>&quot;56&quot;</code> for BSC)</td>
+</tr>
+<tr>
+<td>address</td>
+<td>string</td>
+<td>Yes</td>
+<td>Address to classify (e.g., <code>&quot;0xAb468a1Ba9A57C4f313A0fcD579FBD748F484599&quot;</code>)</td>
+</tr>
+</tbody></table>
+
+<p><strong>Example Request:</strong></p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"chainId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"56"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xAb468a1Ba9A57C4f313A0fcD579FBD748F484599"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<hr>
+<h3 id='response'>Response</h3><h4 id='success-http-200'>Success (HTTP 200)</h4>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>code</td>
+<td>string</td>
+<td>Status code (<code>&quot;0&quot;</code> for success)</td>
+</tr>
+<tr>
+<td>status</td>
+<td>string</td>
+<td>Status message (<code>&quot;ok&quot;</code>)</td>
+</tr>
+<tr>
+<td>data</td>
+<td>object</td>
+<td>Classification result</td>
+</tr>
+</tbody></table>
+
+<p><strong>data Object Fields:</strong></p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>address</td>
+<td>string</td>
+<td>Full address with chain prefix</td>
+</tr>
+<tr>
+<td>classification</td>
+<td>string</td>
+<td>Classification label (e.g., <code>&quot;Proxy&quot;</code>)</td>
+</tr>
+<tr>
+<td>classification_id</td>
+<td>integer</td>
+<td>Classification ID</td>
+</tr>
+<tr>
+<td>details</td>
+<td>object</td>
+<td>Additional details (see below)</td>
+</tr>
+<tr>
+<td>scanned_time</td>
+<td>integer</td>
+<td>Unix timestamp of scan</td>
+</tr>
+<tr>
+<td>timestamp</td>
+<td>string</td>
+<td>ISO8601 timestamp of scan</td>
+</tr>
+</tbody></table>
+
+<p><strong>classification field values</strong></p>
+
+<p>The <code>classification</code> field in the Address Classify response indicates the type of the address. Its value can be one of the following:</p>
+
+<table><thead>
+<tr>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>EOA</td>
+<td>Externally Owned Account (a regular user wallet)</td>
+</tr>
+<tr>
+<td>Unverified</td>
+<td>Contract or address whose type could not be verified</td>
+</tr>
+<tr>
+<td>Universal</td>
+<td>Universal contract type</td>
+</tr>
+<tr>
+<td>Factory</td>
+<td>Contract that deploys other contracts (factory pattern)</td>
+</tr>
+<tr>
+<td>Router</td>
+<td>Router contract (commonly used in DEXs)</td>
+</tr>
+<tr>
+<td>MasterChef</td>
+<td>MasterChef contract (commonly used in yield farming)</td>
+</tr>
+<tr>
+<td>Proxy</td>
+<td>Proxy contract (upgradeable contract pattern)</td>
+</tr>
+<tr>
+<td>ERC20Pair</td>
+<td>Liquidity pool pair contract (e.g., Uniswap/Sushiswap pair)</td>
+</tr>
+<tr>
+<td>ERC20</td>
+<td>ERC20 token contract</td>
+</tr>
+<tr>
+<td>ERC721</td>
+<td>ERC721 NFT contract</td>
+</tr>
+<tr>
+<td>ERC777</td>
+<td>ERC777 token contract</td>
+</tr>
+<tr>
+<td>ERC1155</td>
+<td>ERC1155 multi-token contract</td>
+</tr>
+<tr>
+<td>ERC4626</td>
+<td>ERC4626 tokenized vault contract</td>
+</tr>
+<tr>
+<td>EIP7702</td>
+<td>EIP-7702 account type</td>
+</tr>
+</tbody></table>
+
+<p>These values help you understand the nature of the address being classified. If you need more details about a specific classification, please contact support.</p>
+
+<p><strong>details field values:</strong></p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>is_verified</td>
+<td>bool</td>
+<td>Whether the contract is verified</td>
+</tr>
+</tbody></table>
+
+<p><strong>Example Response:</strong></p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ok"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bsc:0xAb468a1Ba9A57C4f313A0fcD579FBD748F484599"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"classification"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Proxy"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"classification_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"details"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"is_verified"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"scanned_time"</span><span class="p">:</span><span class="w"> </span><span class="mi">1751447586</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-07-02T09:13:11.769523"</span><span class="p">,</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<hr>
+<h3 id='error-responses'>Error Responses</h3>
+<ul>
+<li>Standard HTTP error codes for invalid requests or server errors.</li>
+<li>The <code>code</code> and <code>status</code> fields in the response will indicate the error.</li>
+</ul>
+
+<hr>
+<h3 id='example-curl'>Example cURL</h3><div class="highlight"><pre class="highlight sh tab-shell"><code>curl <span class="nt">--request</span> POST <span class="se">\</span>
+  <span class="nt">--url</span> https://service.hashdit.io/v2/hashdit/address-classify <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+  <span class="nt">--data</span> <span class="s1">'{
+    "chainId": "56",
+    "address": "0xAb468a1Ba9A57C4f313A0fcD579FBD748F484599"
+}'</span>
+</code></pre></div>
+<hr>
+<h2 id='transaction-security'>Transaction Security</h2><div class="highlight"><pre class="highlight go tab-go"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="k">import</span> <span class="p">(</span>
+    <span class="s">"bytes"</span>
+    <span class="s">"fmt"</span>
+    <span class="s">"net/http"</span>
+<span class="p">)</span>
+
+<span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">url</span> <span class="o">:=</span> <span class="s">"https://service.hashdit.io/v2/hashdit/transaction-security"</span>
     <span class="n">method</span> <span class="o">:=</span> <span class="s">"POST"</span>
 
     <span class="n">payload</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">(</span><span class="s">`{
@@ -486,7 +786,7 @@ curl <span class="nt">--request</span> POST <span class="se">\</span>
 <span class="p">}</span>
 </code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
 
-<span class="n">url</span> <span class="o">=</span> <span class="s">"https://api.diting.pro/v2/hashdit/transaction-security"</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://service.hashdit.io/v2/hashdit/transaction-security"</span>
 <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s">"from"</span><span class="p">:</span> <span class="s">"0xf977814e90da44bfa03b6295a0616a897441acec"</span><span class="p">,</span>
     <span class="s">"to"</span><span class="p">:</span> <span class="s">"0x55d398326f99059fF775485246999027B3197955"</span><span class="p">,</span>
@@ -504,7 +804,7 @@ curl <span class="nt">--request</span> POST <span class="se">\</span>
 <span class="k">print</span><span class="p">(</span><span class="s">"Response Status:"</span><span class="p">,</span> <span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="s">"Response Body:"</span><span class="p">,</span> <span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
 </code></pre></div><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--request</span> POST <span class="se">\</span>
-  <span class="nt">--url</span> https://api.diting.pro/v2/hashdit/transaction-security <span class="se">\</span>
+  <span class="nt">--url</span> https://service.hashdit.io/v2/hashdit/transaction-security <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'X-API-Key: ****'</span> <span class="se">\</span>
   <span class="nt">--data</span> <span class="s1">'{
@@ -514,7 +814,7 @@ curl <span class="nt">--request</span> POST <span class="se">\</span>
     "dappUrl": "https://claim-linea.com",
     "chainId": 56
 }'</span>
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">https://api.diting.pro/v2/hashdit/transaction-security</span><span class="dl">"</span><span class="p">;</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">https://service.hashdit.io/v2/hashdit/transaction-security</span><span class="dl">"</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="p">{</span>
     <span class="na">from</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0xf977814e90da44bfa03b6295a0616a897441acec</span><span class="dl">"</span><span class="p">,</span>
     <span class="na">to</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0x55d398326f99059fF775485246999027B3197955</span><span class="dl">"</span><span class="p">,</span>
@@ -579,9 +879,9 @@ curl <span class="nt">--request</span> POST <span class="se">\</span>
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>This endpoint returns the risk level and risk details about the requested transaction.</p>
-<h3 id='http-request'>HTTP Request</h3>
-<p><code>POST https://api.diting.pro/v2/hashdit/transaction-security</code></p>
-<h3 id='post-parameters'>Post Parameters</h3>
+<h3 id='http-request-2'>HTTP Request</h3>
+<p><code>POST https://service.hashdit.io/v2/hashdit/transaction-security</code></p>
+<h3 id='post-parameters-2'>Post Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -668,14 +968,6 @@ curl <span class="nt">--request</span> POST <span class="se">\</span>
 <td>status</td>
 <td>&quot;ok&quot;</td>
 </tr>
-<tr>
-<td>data</td>
-<td>the address analysis result, see the right side for details</td>
-</tr>
-<tr>
-<td>urlData</td>
-<td>the url analysis result, see the right side for details</td>
-</tr>
 </tbody></table>
 <h3 id='parameters-in-data'>Parameters in data</h3>
 <table><thead>
@@ -685,27 +977,11 @@ curl <span class="nt">--request</span> POST <span class="se">\</span>
 </tr>
 </thead><tbody>
 <tr>
-<td>risk_level</td>
+<td>overall_risk</td>
 <td>-1: unknown risk, 0 ~ 5: the bigger the number, the higher the risk</td>
 </tr>
 <tr>
-<td>risk_detail</td>
-<td>the result data, see the right side for details</td>
-</tr>
-</tbody></table>
-<h3 id='parameters-in-urldata'>Parameters in urlData</h3>
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>risk_level</td>
-<td>-1: unknown risk, 0 ~ 5: the bigger the number, the higher the risk</td>
-</tr>
-<tr>
-<td>risk_detail</td>
+<td>risk_details</td>
 <td>the result data, see the right side for details</td>
 </tr>
 </tbody></table>
@@ -722,7 +998,7 @@ Discuss with us about an appropriate `risk_level` if you need to take certain ac
 <span class="p">)</span>
 
 <span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">url</span> <span class="o">:=</span> <span class="s">"https://api.diting.pro/v2/hashdit/address-security"</span>
+    <span class="n">url</span> <span class="o">:=</span> <span class="s">"https://service.hashdit.io/v2/hashdit/address-security"</span>
     <span class="n">method</span> <span class="o">:=</span> <span class="s">"POST"</span>
 
     <span class="n">payload</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">(</span><span class="s">`{
@@ -750,7 +1026,7 @@ Discuss with us about an appropriate `risk_level` if you need to take certain ac
 <span class="p">}</span>
 </code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
 
-<span class="n">url</span> <span class="o">=</span> <span class="s">"https://api.diting.pro/v2/hashdit/address-security"</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://service.hashdit.io/v2/hashdit/address-security"</span>
 <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s">"chainId"</span><span class="p">:</span> <span class="mi">56</span><span class="p">,</span>
     <span class="s">"to"</span><span class="p">:</span> <span class="s">"0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"</span>
@@ -765,14 +1041,14 @@ Discuss with us about an appropriate `risk_level` if you need to take certain ac
 <span class="k">print</span><span class="p">(</span><span class="s">"Response Status:"</span><span class="p">,</span> <span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="s">"Response Body:"</span><span class="p">,</span> <span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
 </code></pre></div><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--request</span> POST <span class="se">\</span>
-  <span class="nt">--url</span> https://api.diting.pro/v2/hashdit/address-security <span class="se">\</span>
+  <span class="nt">--url</span> https://service.hashdit.io/v2/hashdit/address-security <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'X-API-Key: ****'</span> <span class="se">\</span>
   <span class="nt">--data</span> <span class="s1">'{
   "chainId": 56,
   "to": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
 }'</span>
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">https://api.diting.pro/v2/hashdit/address-security</span><span class="dl">"</span><span class="p">;</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">https://service.hashdit.io/v2/hashdit/address-security</span><span class="dl">"</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="p">{</span>
     <span class="na">chainId</span><span class="p">:</span> <span class="mi">56</span><span class="p">,</span>
     <span class="na">to</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0xa7a5db3d94810ac366ab663f6fd71e6b795d8538</span><span class="dl">"</span>
@@ -814,9 +1090,9 @@ Discuss with us about an appropriate `risk_level` if you need to take certain ac
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>This endpoint returns the risk level and risk details about the requested transaction.</p>
-<h3 id='http-request-2'>HTTP Request</h3>
-<p><code>POST https://api.diting.pro/v2/hashdit/address-security</code></p>
-<h3 id='post-parameters-2'>Post Parameters</h3>
+<h3 id='http-request-3'>HTTP Request</h3>
+<p><code>POST https://service.hashdit.io/v2/hashdit/address-security</code></p>
+<h3 id='post-parameters-3'>Post Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -883,7 +1159,7 @@ Discuss with us about an appropriate `risk_level` if you need to take certain ac
 <span class="p">)</span>
 
 <span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">url</span> <span class="o">:=</span> <span class="s">"https://api.diting.pro/v2/hashdit/batch-address-security"</span>
+    <span class="n">url</span> <span class="o">:=</span> <span class="s">"https://service.hashdit.io/v2/hashdit/batch-address-security"</span>
     <span class="n">method</span> <span class="o">:=</span> <span class="s">"POST"</span>
 
     <span class="n">payload</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">(</span><span class="s">`[
@@ -916,7 +1192,7 @@ Discuss with us about an appropriate `risk_level` if you need to take certain ac
 <span class="p">}</span>
 </code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
 
-<span class="n">url</span> <span class="o">=</span> <span class="s">"https://api.diting.pro/v2/hashdit/batch-address-security"</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://service.hashdit.io/v2/hashdit/batch-address-security"</span>
 <span class="n">payload</span> <span class="o">=</span> <span class="p">[</span>
     <span class="p">{</span>
         <span class="s">"chainId"</span><span class="p">:</span> <span class="mi">56</span><span class="p">,</span>
@@ -936,14 +1212,14 @@ Discuss with us about an appropriate `risk_level` if you need to take certain ac
 <span class="k">print</span><span class="p">(</span><span class="s">"Response Status:"</span><span class="p">,</span> <span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="s">"Response Body:"</span><span class="p">,</span> <span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
 </code></pre></div><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--request</span> POST <span class="se">\</span>
-  <span class="nt">--url</span> https://api.diting.pro/v2/hashdit/batch-address-security <span class="se">\</span>
+  <span class="nt">--url</span> https://service.hashdit.io/v2/hashdit/batch-address-security <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'X-API-Key: ****'</span> <span class="se">\</span>
   <span class="nt">--data</span> <span class="s1">'[{
   "chainId": 56,
   "address": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
 },{"address": "0xfa7fee97951fb46675410aef89c9f3f6dd93f042"}]'</span>
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">https://api.diting.pro/v2/hashdit/batch-address-security</span><span class="dl">"</span><span class="p">;</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">https://service.hashdit.io/v2/hashdit/batch-address-security</span><span class="dl">"</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="p">[{</span>
     <span class="na">chainId</span><span class="p">:</span> <span class="mi">56</span><span class="p">,</span>
     <span class="na">address</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0xa7a5db3d94810ac366ab663f6fd71e6b795d8538</span><span class="dl">"</span>
@@ -1025,9 +1301,9 @@ Discuss with us about an appropriate `risk_level` if you need to take certain ac
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>This endpoint returns the risk level and risk details about the requested transaction.</p>
-<h3 id='http-request-3'>HTTP Request</h3>
-<p><code>POST https://api.diting.pro/v2/hashdit/batch-address-security</code></p>
-<h3 id='post-parameters-3'>Post Parameters</h3>
+<h3 id='http-request-4'>HTTP Request</h3>
+<p><code>POST https://service.hashdit.io/v2/hashdit/batch-address-security</code></p>
+<h3 id='post-parameters-4'>Post Parameters</h3>
 <p>The array of:</p>
 
 <table><thead>
@@ -1096,7 +1372,7 @@ Discuss with us about an appropriate `risk_level` if you need to take certain ac
 <span class="p">)</span>
 
 <span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">url</span> <span class="o">:=</span> <span class="s">"https://api.diting.pro/v2/hashdit/token-security"</span>
+    <span class="n">url</span> <span class="o">:=</span> <span class="s">"https://service.hashdit.io/v2/hashdit/token-security"</span>
     <span class="n">method</span> <span class="o">:=</span> <span class="s">"POST"</span>
 
     <span class="n">payload</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">(</span><span class="s">`{
@@ -1124,7 +1400,7 @@ Discuss with us about an appropriate `risk_level` if you need to take certain ac
 <span class="p">}</span>
 </code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
 
-<span class="n">url</span> <span class="o">=</span> <span class="s">"https://api.diting.pro/v2/hashdit/token-security"</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://service.hashdit.io/v2/hashdit/token-security"</span>
 <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s">"chainId"</span><span class="p">:</span> <span class="mi">56</span><span class="p">,</span>
     <span class="s">"address"</span><span class="p">:</span> <span class="s">"0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"</span>
@@ -1139,14 +1415,14 @@ Discuss with us about an appropriate `risk_level` if you need to take certain ac
 <span class="k">print</span><span class="p">(</span><span class="s">"Response Status:"</span><span class="p">,</span> <span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="s">"Response Body:"</span><span class="p">,</span> <span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
 </code></pre></div><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--request</span> POST <span class="se">\</span>
-  <span class="nt">--url</span> https://api.diting.pro/v2/hashdit/token-security <span class="se">\</span>
+  <span class="nt">--url</span> https://service.hashdit.io/v2/hashdit/token-security <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'X-API-Key: ****'</span> <span class="se">\</span>
   <span class="nt">--data</span> <span class="s1">'{
   "chainId": 56,
   "address": "0xa7a5db3d94810ac366ab663f6fd71e6b795d8538"
 }'</span>
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">https://api.diting.pro/v2/hashdit/token-security</span><span class="dl">"</span><span class="p">;</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">https://service.hashdit.io/v2/hashdit/token-security</span><span class="dl">"</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="p">{</span>
     <span class="na">chainId</span><span class="p">:</span> <span class="mi">56</span><span class="p">,</span>
     <span class="na">address</span><span class="p">:</span> <span class="dl">"</span><span class="s2">0xa7a5db3d94810ac366ab663f6fd71e6b795d8538</span><span class="dl">"</span>
@@ -1279,9 +1555,9 @@ Discuss with us about an appropriate `risk_level` if you need to take certain ac
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>This endpoint returns all of the risk info about the requested token.</p>
-<h3 id='http-request-4'>HTTP Request</h3>
-<p><code>POST https://api.diting.pro/v2/hashdit/token-security</code></p>
-<h3 id='post-parameters-4'>Post Parameters</h3>
+<h3 id='http-request-5'>HTTP Request</h3>
+<p><code>POST https://service.hashdit.io/v2/hashdit/token-security</code></p>
+<h3 id='post-parameters-5'>Post Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -1332,7 +1608,7 @@ Discuss with us about an appropriate `risk_level` if you need to take certain ac
 <span class="p">)</span>
 
 <span class="k">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">url</span> <span class="o">:=</span> <span class="s">"https://api.diting.pro/v2/hashdit/domain-security"</span>
+    <span class="n">url</span> <span class="o">:=</span> <span class="s">"https://service.hashdit.io/v2/hashdit/domain-security"</span>
     <span class="n">method</span> <span class="o">:=</span> <span class="s">"POST"</span>
 
     <span class="n">payload</span> <span class="o">:=</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">(</span><span class="s">`{
@@ -1359,7 +1635,7 @@ Discuss with us about an appropriate `risk_level` if you need to take certain ac
 <span class="p">}</span>
 </code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">requests</span>
 
-<span class="n">url</span> <span class="o">=</span> <span class="s">"https://api.diting.pro/v2/hashdit/domain-security"</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s">"https://service.hashdit.io/v2/hashdit/domain-security"</span>
 <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s">"url"</span><span class="p">:</span> <span class="s">"example.com"</span>
 <span class="p">}</span>
@@ -1373,13 +1649,13 @@ Discuss with us about an appropriate `risk_level` if you need to take certain ac
 <span class="k">print</span><span class="p">(</span><span class="s">"Response Status:"</span><span class="p">,</span> <span class="n">response</span><span class="p">.</span><span class="n">status_code</span><span class="p">)</span>
 <span class="k">print</span><span class="p">(</span><span class="s">"Response Body:"</span><span class="p">,</span> <span class="n">response</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
 </code></pre></div><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--request</span> POST <span class="se">\</span>
-  <span class="nt">--url</span> https://api.diting.pro/v2/hashdit/domain-security <span class="se">\</span>
+  <span class="nt">--url</span> https://service.hashdit.io/v2/hashdit/domain-security <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
   <span class="nt">--header</span> <span class="s1">'X-API-Key: ****'</span> <span class="se">\</span>
   <span class="nt">--data</span> <span class="s1">'{
   "url": "example.com"
 }'</span>
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">https://api.diting.pro/v2/hashdit/domain-security</span><span class="dl">"</span><span class="p">;</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">https://service.hashdit.io/v2/hashdit/domain-security</span><span class="dl">"</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="p">{</span>
     <span class="na">url</span><span class="p">:</span> <span class="dl">"</span><span class="s2">example.com</span><span class="dl">"</span>
 <span class="p">};</span>
@@ -1424,9 +1700,9 @@ Discuss with us about an appropriate `risk_level` if you need to take certain ac
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>This endpoint returns all of the risk info about the requested url.</p>
-<h3 id='http-request-5'>HTTP Request</h3>
-<p><code>POST https://api.diting.pro/v2/hashdit/domain-security</code></p>
-<h3 id='post-parameters-5'>Post Parameters</h3>
+<h3 id='http-request-6'>HTTP Request</h3>
+<p><code>POST https://service.hashdit.io/v2/hashdit/domain-security</code></p>
+<h3 id='post-parameters-6'>Post Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
