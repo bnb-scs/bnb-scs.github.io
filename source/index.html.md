@@ -240,17 +240,6 @@ fetch(url, {
 | chainId  | string | Yes      | Chain ID (e.g., `"56"` for BSC) |
 | address  | string | Yes      | Address to classify (e.g., `"0xAb468a1Ba9A57C4f313A0fcD579FBD748F484599"`) |
 
-**Example Request:**
-
-```json
-{
-  "chainId": "56",
-  "address": "0xAb468a1Ba9A57C4f313A0fcD579FBD748F484599"
-}
-```
-
----
-
 ### Response
 
 #### Success (HTTP 200)
