@@ -209,6 +209,25 @@ fetch(url, {
 });
 ```
 
+> The above command returns JSON structured like this:
+
+```json
+{
+  "code": "0",
+  "status": "ok",
+  "data": {
+    "address": "bsc:0xAb468a1Ba9A57C4f313A0fcD579FBD748F484599",
+    "classification": "Proxy",
+    "classification_id": 5,
+    "details": {
+      "is_verified": true
+    },
+    "scanned_time": 1751447586,
+    "timestamp": "2025-07-02T09:13:11.769523",
+  }
+}
+```
+
 
 ### HTTP Request
 
@@ -282,47 +301,7 @@ These values help you understand the nature of the address being classified. If 
 |-------------|--------|----------------------------|
 | is_verified | bool   | Whether the contract is verified |
 
-**Example Response:**
 
-```json
-{
-  "code": "0",
-  "status": "ok",
-  "data": {
-    "address": "bsc:0xAb468a1Ba9A57C4f313A0fcD579FBD748F484599",
-    "classification": "Proxy",
-    "classification_id": 5,
-    "details": {
-      "is_verified": true
-    },
-    "scanned_time": 1751447586,
-    "timestamp": "2025-07-02T09:13:11.769523",
-  }
-}
-```
-
----
-
-### Error Responses
-
-- Standard HTTP error codes for invalid requests or server errors.
-- The `code` and `status` fields in the response will indicate the error.
-
----
-
-### Example cURL
-
-```sh
-curl --request POST \
-  --url https://service.hashdit.io/v2/hashdit/address-classify \
-  --header 'Content-Type: application/json' \
-  --data '{
-    "chainId": "56",
-    "address": "0xAb468a1Ba9A57C4f313A0fcD579FBD748F484599"
-}'
-```
-
----
 
 ## Transaction Security
 
