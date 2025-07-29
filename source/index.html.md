@@ -793,7 +793,7 @@ Parameter | Required? | Default | Description
 --------- | --------- | ------- | -----------
 chainId   | Yes       | 56      | The chain you want to check againt
 address   | Yes       |         | the target address of the transaction
-| mode     | string | No       | Supported mode: `"preload"` |
+| mode     | No |        | Supported mode: `"preload"` |
 
 **mode parameter:**
 - `"preload"`: When this mode is specified, the data will be preloaded so that you won't wait when you ask for them later. The data will be persistently preloading and never expire.
