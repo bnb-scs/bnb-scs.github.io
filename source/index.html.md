@@ -290,6 +290,196 @@ These values help you understand the nature of the address being classified. If 
 |-------------|--------|----------------------------|
 | is_verified | bool   | Whether the contract is verified |
 
+## Batch Address Classify
+
+Classifies a batch of blockchain addresses, returning their types, classifications, and related metadata.
+
+```go
+package main
+
+import (
+    "bytes"
+    "fmt"
+    "net/http"
+)
+
+func main() {
+    url := "https://service.hashdit.io/v2/hashdit/batch-address-classify"
+    method := "POST"
+
+    payload := []byte(`[
+        {
+            "address": "0x55d398326f99059fF775485246999027B3197955",
+            "chainId": 56
+        },
+        {
+            "address": "0xAb468a1Ba9A57C4f313A0fcD579FBD748F484599",
+            "chainId": 56
+        }
+    ]`)
+
+    client := &http.Client{}
+    req, err := http.NewRequest(method, url, bytes.NewBuffer(payload))
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    req.Header.Add("Content-Type", "application/json")
+    req.Header.Add("X-API-Key", "****")
+
+    res, err := client.Do(req)
+    if err != nil {
+        fmt.Println(err)
+        return
+    }
+    defer res.Body.Close()
+
+    fmt.Println("Response Status:", res.Status)
+}
+```
+
+```python
+import requests
+
+url = "https://service.hashdit.io/v2/hashdit/batch-address-classify"
+payload = [
+    {
+        "address": "0x55d398326f99059fF775485246999027B3197955",
+        "chainId": 56
+    },
+    {
+        "address": "0xAb468a1Ba9A57C4f313A0fcD579FBD748F484599",
+        "chainId": 56
+    }
+]
+headers = {
+    "Content-Type": "application/json",
+    "X-API-Key": "****"
+}
+
+response = requests.post(url, json=payload, headers=headers)
+
+print("Response Status:", response.status_code)
+print("Response Body:", response.text)
+```
+
+```shell
+curl --request POST \
+  --url https://service.hashdit.io/v2/hashdit/batch-address-classify \
+  --header 'Content-Type: application/json' \
+  --header 'X-API-Key: ****' \
+  --data '[
+    {
+        "address": "0x55d398326f99059fF775485246999027B3197955",
+        "chainId": 56
+    },
+    {
+        "address": "0xAb468a1Ba9A57C4f313A0fcD579FBD748F484599",
+        "chainId": 56
+    }
+]'
+```
+
+```javascript
+const url = "https://service.hashdit.io/v2/hashdit/batch-address-classify";
+const payload = [
+    {
+        address: "0x55d398326f99059fF775485246999027B3197955",
+        chainId: 56
+    },
+    {
+        address: "0xAb468a1Ba9A57C4f313A0fcD579FBD748F484599",
+        chainId: 56
+    }
+];
+
+const headers = {
+    "Content-Type": "application/json",
+    "X-API-Key": "****"
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify(payload)
+})
+.then(response => response.json())
+.then(data => {
+    console.log("Response Data:", data);
+})
+.catch(error => {
+    console.error("Error:", error);
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "code": "0",
+  "status": "ok",
+  "data": [
+    {
+      "chainId": "56",
+      "address": "0x55d398326f99059fF775485246999027B3197955",
+      "classification": "Contract",
+      "error": "",
+    },
+    {
+      "chainId": "56",
+      "address": "0xAb468a1Ba9A57C4f313A0fcD579FBD748F484599",
+      "classification": "EOA",
+      "error": "",
+    }
+  ]
+}
+```
+
+### HTTP Request
+
+`POST https://service.hashdit.io/v2/hashdit/batch-address-classify`
+
+#### Post Parameters
+
+The request body should be an array of objects, each containing:
+
+| Name     | Type   | Required | Description                |
+|----------|--------|----------|----------------------------|
+| chainId  | string | Yes      | Chain ID (e.g., `"56"` for BSC) |
+| address  | string | Yes      | Address to classify (e.g., `"0xAb468a1Ba9A57C4f313A0fcD579FBD748F484599"`) |
+
+### Response
+
+#### Success (HTTP 200)
+
+| Name    | Type   | Description                |
+|---------|--------|----------------------------|
+| code    | string | Status code (`"0"` for success) |
+| status  | string | Status message (`"ok"`)    |
+| data    | array  | Array of classification results |
+
+**data Array Elements:**
+
+Each element in the data array contains the same fields as the single address classify response:
+
+| Name             | Type    | Description                                      |
+|------------------|---------|--------------------------------------------------|
+| chainId          | string  | |
+| address          | string  | Full address with chain prefix                   |
+| classification   | string  | Classification label (e.g., `"EOA"`)           |
+| error         | string  | the reason if the classification failed                        |
+
+**classification field values**
+
+The `classification` field in the Address Classify response indicates the type of the address. Its value can be one of the following:
+
+| Value         | Description |
+|-------------- |------------|
+| EOA           | Externally Owned Account (a regular user wallet) |
+| EIP7702    | EIP 7702 Account |
+| Contract     | Universal contract type |
+
+These values help you understand the nature of the address being classified. If you need more details about a specific classification, please contact support.
 
 
 ## Transaction Security
@@ -603,6 +793,11 @@ Parameter | Required? | Default | Description
 --------- | --------- | ------- | -----------
 chainId   | Yes       | 56      | The chain you want to check againt
 address   | Yes       |         | the target address of the transaction
+| mode     | string | No       | Supported mode: `"preload"` |
+
+**mode parameter:**
+- `"preload"`: When this mode is specified, the data will be preloaded so that you won't wait when you ask for them later. The data will be persistently preloading and never expire.
+
 
 ### HTTP Response
 
@@ -1037,6 +1232,7 @@ Parameter | Required? | Default | Description
 --------- | --------- | ------- | -----------
 chainId   | Yes       | 56      | the chain you want to check againt
 address   | Yes       |         | the token address to be analyzed
+sync   | Optional       | false        | wait for the result or not
 
 ### HTTP Response
 
